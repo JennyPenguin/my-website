@@ -48,12 +48,13 @@ scene.add(plane);
 const gui = new dat.GUI();
 
 const options = {
-  torusColor: '#ff12ff'
+  torusColor: '#ffffff'
 };
 
 gui.addColor(options, 'torusColor').onChange(function (e) {
-  torus.material.color.set(e);
+  plane.material.color.set(e);
 });
+
 
 function animate() {
   torus.rotation.x += 0.01;
