@@ -48,11 +48,16 @@ scene.add(plane);
 const gui = new dat.GUI();
 
 const options = {
-  torusColor: '#ffffff'
+  torusColor: '#ffffff',
+  wireframe: false
 };
 
 gui.addColor(options, 'torusColor').onChange(function (e) {
-  plane.material.color.set(e);
+  torus.material.color.set(e);
+});
+
+gui.add(options, 'wireframe').onChange(function (e) {
+  torus.material.wireframe = e;
 });
 
 
