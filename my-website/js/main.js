@@ -16,40 +16,48 @@ const renderer = new THREE.WebGLRenderer({
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 
-const axesHelper = new THREE.AxesHelper(30);
-scene.add(axesHelper);
+// const axesHelper = new THREE.AxesHelper(30);
+// scene.add(axesHelper);
 
-const gridHelper = new THREE.GridHelper(30);
-scene.add(gridHelper);
+// const gridHelper = new THREE.GridHelper(30);
+// scene.add(gridHelper);
 
-const modelLoader = new GLTFLoader();
 
-modelLoader.load(hippoURL.href, function (gltf) {
-  const model = gltf.scene;
-  // model.position.set(10, 10, 10);
-  scene.add(model);
-}, undefined, function (error) { console.error(); });
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
+// scene.background = new THREE.Color(0x00c5ff);
 
-camera.position.set(6, 4, -6);
+camera.position.set(6, 4, -7);
 camera.rotation.set(-3, 0, 3);
 orbitControls.update();
 
-const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
-const torusMaterial = new THREE.MeshBasicMaterial({ color: 0xFF12FF, wireframe: true });
-const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-scene.add(torus);
+// const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
+// const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xFF12FF, wireframe: true });
+// const torus = new THREE.Mesh(torusGeometry, torusMaterial);
+// scene.add(torus);
 
-const planeGeometry = new THREE.PlaneGeometry(30, 30);
-const planeMaterial = new THREE.MeshBasicMaterial({ color: 0xFFFFFF, side: THREE.DoubleSide });
+const planeGeometry = new THREE.PlaneGeometry(40, 30);
+const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, side: THREE.DoubleSide });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2;
 scene.add(plane);
 
 const ambientLight = new THREE.AmbientLight(0xFFFFFF);
 scene.add(ambientLight);
+
+const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+
+
+const modelLoader = new GLTFLoader();
+
+modelLoader.load(hippoURL.href, function (gltf) {
+  const model = gltf.scene;
+  model.position.set(0, 0.5, -1);
+  directionalLight.target = model;
+  scene.add(model);
+}, undefined, function (error) { console.error(); });
+scene.add(directionalLight);
 
 const gui = new dat.GUI();
 
@@ -70,42 +78,41 @@ const options = {
   cameraSizeZ: 0.0
 };
 
-gui.addColor(options, 'torusColor').onChange(function (e) {
-  torus.material.color.set(e);
-});
+// gui.addColor(options, 'torusColor').onChange(function (e) {
+//   torus.material.color.set(e);
+// });
 
-gui.add(options, 'wireframe').onChange(function (e) {
-  torus.material.wireframe = e;
-});
+// gui.add(options, 'wireframe').onChange(function (e) {
+//   torus.material.wireframe = e;
+// });
 
 gui.add(options, 'speed', 0, 0.1);
 
-gui.add(options, 'cameraX', -10.0, 10.0);
 
-gui.add(options, 'cameraY', -10.0, 10.0);
-
-gui.add(options, 'cameraZ', -10.0, 10.0);
-
-gui.add(options, 'cameraRotX', -180, 180);
-
-gui.add(options, 'cameraRotY', -180, 180);
-
-gui.add(options, 'cameraRotZ', -180, 180);
-gui.add(options, 'cameraSizeX', 1, 50);
-gui.add(options, 'cameraSizeY', 1, 50);
-gui.add(options, 'cameraSizeZ', 1, 50);
 
 function animate() {
-  torus.rotation.x += 0.01;
-  torus.rotation.y += 0.01;
-  torus.rotation.z += 0.01;
+  // torus.rotation.x += 0.01;
+  // torus.rotation.y += 0.01;
+  // torus.rotation.z += 0.01;
 
   step += options.speed;
-  torus.position.y = 10 * Math.abs(Math.sin(step));
+  // torus.position.y = 10 * Math.abs(Math.sin(step));
 
-  updateCameraDisplay();
+  // updateCameraDisplay();
   gui.updateDisplay();
   renderer.render(scene, camera);
+}
+
+function setCameraDisplay() {
+  gui.add(options, 'cameraX', -10.0, 10.0);
+  gui.add(options, 'cameraY', -10.0, 10.0);
+  gui.add(options, 'cameraZ', -10.0, 10.0);
+  gui.add(options, 'cameraRotX', -180, 180);
+  gui.add(options, 'cameraRotY', -180, 180);
+  gui.add(options, 'cameraRotZ', -180, 180);
+  gui.add(options, 'cameraSizeX', 1, 50);
+  gui.add(options, 'cameraSizeY', 1, 50);
+  gui.add(options, 'cameraSizeZ', 1, 50);
 }
 
 function updateCameraDisplay() {
