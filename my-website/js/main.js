@@ -5,6 +5,8 @@ import * as dat from 'dat.gui';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_sitting.gltf', import.meta.url);
 
+const degreeToRad = Math.PI / 180;
+
 const scene = new THREE.Scene();
 
 const renderer = new THREE.WebGLRenderer({
@@ -31,7 +33,8 @@ modelLoader.load(hippoURL.href, function (gltf) {
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
 
-camera.position.set(-10, 20, 30);
+camera.position.set(6, 4, -6);
+camera.rotation.set(-3, 0, 3);
 orbitControls.update();
 
 const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
@@ -55,7 +58,16 @@ let step = 0;
 const options = {
   torusColor: '#ffffff',
   wireframe: true,
-  speed: 0.01
+  speed: 0.01,
+  cameraX: -10.0,
+  cameraY: 20.0,
+  cameraZ: 30.0,
+  cameraRotX: 0.0,
+  cameraRotY: 0.0,
+  cameraRotZ: 0.0,
+  cameraSizeX: 0.0,
+  cameraSizeY: 0.0,
+  cameraSizeZ: 0.0
 };
 
 gui.addColor(options, 'torusColor').onChange(function (e) {
@@ -68,6 +80,21 @@ gui.add(options, 'wireframe').onChange(function (e) {
 
 gui.add(options, 'speed', 0, 0.1);
 
+gui.add(options, 'cameraX', -10.0, 10.0);
+
+gui.add(options, 'cameraY', -10.0, 10.0);
+
+gui.add(options, 'cameraZ', -10.0, 10.0);
+
+gui.add(options, 'cameraRotX', -180, 180);
+
+gui.add(options, 'cameraRotY', -180, 180);
+
+gui.add(options, 'cameraRotZ', -180, 180);
+gui.add(options, 'cameraSizeX', 1, 50);
+gui.add(options, 'cameraSizeY', 1, 50);
+gui.add(options, 'cameraSizeZ', 1, 50);
+
 function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
@@ -76,7 +103,22 @@ function animate() {
   step += options.speed;
   torus.position.y = 10 * Math.abs(Math.sin(step));
 
+  updateCameraDisplay();
+  gui.updateDisplay();
   renderer.render(scene, camera);
+}
+
+function updateCameraDisplay() {
+  // camera.rotation.y = 0;
+  options.cameraX = camera.position.x;
+  options.cameraY = camera.position.y;
+  options.cameraZ = camera.position.z;
+  options.cameraRotX = camera.rotation.x;
+  options.cameraRotY = camera.rotation.y;
+  options.cameraRotZ = camera.rotation.z;
+  options.cameraSizeX = camera.scale.x;
+  options.cameraSizeY = camera.scale.y;
+  options.cameraSizeZ = camera.scale.z;
 }
 
 renderer.setAnimationLoop(animate)
