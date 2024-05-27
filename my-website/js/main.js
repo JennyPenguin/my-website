@@ -7,6 +7,7 @@ import * as dat from 'dat.gui';
 
 
 import starry_back from '../images/Starry.png';
+import { materialEmissive } from 'three/examples/jsm/nodes/Nodes.js';
 
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_sitting.gltf', import.meta.url);
@@ -41,8 +42,8 @@ orbitControls.update();
 
 const textureLoader = new THREE.TextureLoader();
 // scene.background = textureLoader.load(starry_back);
-const cubeTextureLoader = new THREE.CubeTextureLoader();
-scene.background = cubeTextureLoader.load([starry_back, starry_back, starry_back, starry_back, starry_back, starry_back])
+//const cubeTextureLoader = new THREE.CubeTextureLoader();
+//scene.background = cubeTextureLoader.load([starry_back, starry_back, starry_back, starry_back, starry_back, starry_back])
 
 const planeGeometry = new THREE.PlaneGeometry(70, 70);
 const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, side: THREE.DoubleSide });
@@ -63,23 +64,33 @@ scene.add(sLightHelper);
 
 
 const modelLoader = new GLTFLoader();
-const heartID = 0;
+
 
 modelLoader.load(hippoURL.href, function (gltf) {
   const model = gltf.scene;
   model.position.set(0, 0.5, -1);
   model.castShadow = true;
   scene.add(model);
-  heartID = model.id;
 }, undefined, function (error) { console.error(); });
 
 
 modelLoader.load(heartURL.href, function (gltf) {
   const model = gltf.scene;
-  model.position.set(1, 2, -1);
+  model.traverse((o) => {
+    if (o.isMesh) {
+      o.material.emissive = new THREE.Color(0xE7A2E4);
+      o.material.emissiveIntensity = 0.3;
+    }
+  });
+  model.position.set(1.6, 2, -2);
   model.castShadow = true;
+  const axisHelper = new THREE.AxesHelper(1);
+  scene.add(axisHelper);
   scene.add(model);
+  animate();
 }, undefined, function (error) { console.error(); });
+
+
 
 const gui = new dat.GUI();
 
@@ -100,12 +111,14 @@ const options = {
   cameraSizeZ: 0.0,
   angle: 0.83,
   penumbra: 0,
-  intensity: 3
+  intensity: 3,
+  heartAngle: 0
 };
 
 gui.add(options, 'angle', 0, 1);
 gui.add(options, 'penumbra', 0, 1);
 gui.add(options, 'intensity', 0, 10);
+gui.add(options, 'heartAngle', 0, 360);
 
 const bloomRenderScene = new RenderPass(scene, camera);
 const renderComposer = new EffectComposer(renderer);
@@ -125,14 +138,19 @@ window.addEventListener('mousemove', function (e) {
 })
 
 const rayCaster = new THREE.Raycaster();
+const directionalL = new THREE.DirectionalLight(0xFFFFFF, 0.1);
+scene.add(directionalL);
+
 
 function animate() {
+  const heartModel = scene.getObjectByName('heart');
+  heartModel.rotation.y += 0.01;
 
   rayCaster.setFromCamera(mousePosition, camera);
   const intersects = rayCaster.intersectObjects(scene.children);
   console.log(intersects);
   for (let i = 0; i < intersects.length; i++) {
-    if (intersects[i].object.id === heartID) {
+    if (intersects[i].object.id === heartModel.id) {
       intersects[i].object.material.color.set(0xf0c6ee);
     }
   }
@@ -148,7 +166,6 @@ function animate() {
   requestAnimationFrame(animate);
 }
 
-animate();
 
 function setCameraDisplay() {
   gui.add(options, 'cameraX', -10.0, 10.0);
