@@ -24,7 +24,7 @@ const modelLoader = new GLTFLoader();
 
 modelLoader.load(hippoURL.href, function (gltf) {
   const model = gltf.scene;
-  model.position.set(10, 10, 10);
+  // model.position.set(10, 10, 10);
   scene.add(model);
 }, undefined, function (error) { console.error(); });
 
@@ -45,11 +45,17 @@ const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2;
 scene.add(plane);
 
+const ambientLight = new THREE.AmbientLight(0xFFFFFF);
+scene.add(ambientLight);
+
 const gui = new dat.GUI();
+
+let step = 0;
 
 const options = {
   torusColor: '#ffffff',
-  wireframe: false
+  wireframe: true,
+  speed: 0.01
 };
 
 gui.addColor(options, 'torusColor').onChange(function (e) {
@@ -60,11 +66,15 @@ gui.add(options, 'wireframe').onChange(function (e) {
   torus.material.wireframe = e;
 });
 
+gui.add(options, 'speed', 0, 0.1);
 
 function animate() {
   torus.rotation.x += 0.01;
   torus.rotation.y += 0.01;
   torus.rotation.z += 0.01;
+
+  step += options.speed;
+  torus.position.y = 10 * Math.abs(Math.sin(step));
 
   renderer.render(scene, camera);
 }
