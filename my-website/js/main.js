@@ -1,11 +1,18 @@
 import * as THREE from 'three';
 import { GLTFLoader, OrbitControls } from 'three/examples/jsm/Addons.js';
+import { RenderPass } from 'three/examples/jsm/Addons.js';
+import { EffectComposer } from 'three/examples/jsm/Addons.js';
+import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import * as dat from 'dat.gui';
+
+
+import starry_back from '../images/Starry.png';
 
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_sitting.gltf', import.meta.url);
 
 const degreeToRad = Math.PI / 180;
+
 
 const scene = new THREE.Scene();
 
@@ -13,51 +20,66 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
 
+renderer.shadowMap.enabled = true;
+
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
 const orbitControls = new OrbitControls(camera, renderer.domElement);
 
-// const axesHelper = new THREE.AxesHelper(30);
-// scene.add(axesHelper);
+const axesHelper = new THREE.AxesHelper(30);
+scene.add(axesHelper);
 
-// const gridHelper = new THREE.GridHelper(30);
-// scene.add(gridHelper);
-
+const gridHelper = new THREE.GridHelper(30);
+scene.add(gridHelper);
 
 
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight);
-// scene.background = new THREE.Color(0x00c5ff);
 
 camera.position.set(6, 4, -7);
 camera.rotation.set(-3, 0, 3);
 orbitControls.update();
 
-// const torusGeometry = new THREE.TorusGeometry(10, 3, 16, 100);
-// const torusMaterial = new THREE.MeshStandardMaterial({ color: 0xFF12FF, wireframe: true });
-// const torus = new THREE.Mesh(torusGeometry, torusMaterial);
-// scene.add(torus);
+const textureLoader = new THREE.TextureLoader();
+// scene.background = textureLoader.load(starry_back);
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+scene.background = cubeTextureLoader.load([starry_back, starry_back, starry_back, starry_back, starry_back, starry_back])
 
-const planeGeometry = new THREE.PlaneGeometry(40, 30);
+const planeGeometry = new THREE.PlaneGeometry(70, 70);
 const planeMaterial = new THREE.MeshStandardMaterial({ color: 0x000000, side: THREE.DoubleSide });
 const plane = new THREE.Mesh(planeGeometry, planeMaterial);
 plane.rotation.x = -Math.PI / 2;
+plane.receiveShadow = true;
 scene.add(plane);
 
-const ambientLight = new THREE.AmbientLight(0xFFFFFF);
-scene.add(ambientLight);
+const spotLight = new THREE.SpotLight(0xFFFFFF, 5.3);
+spotLight.castShadow = true;
+spotLight.angle = 0.7;
+scene.add(spotLight);
+spotLight.position.set(5, 0, 0);
+const sLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(sLightHelper);
 
-const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 1);
+// scene.fog = new THREE.FogExp2(0xFFFFFF, 0.05);
 
 
 const modelLoader = new GLTFLoader();
+const heartID = 0;
 
 modelLoader.load(hippoURL.href, function (gltf) {
   const model = gltf.scene;
   model.position.set(0, 0.5, -1);
-  directionalLight.target = model;
+  model.castShadow = true;
+  scene.add(model);
+  heartID = model.id;
+}, undefined, function (error) { console.error(); });
+
+
+modelLoader.load(heartURL.href, function (gltf) {
+  const model = gltf.scene;
+  model.position.set(1, 2, -1);
+  model.castShadow = true;
   scene.add(model);
 }, undefined, function (error) { console.error(); });
-scene.add(directionalLight);
 
 const gui = new dat.GUI();
 
@@ -75,33 +97,58 @@ const options = {
   cameraRotZ: 0.0,
   cameraSizeX: 0.0,
   cameraSizeY: 0.0,
-  cameraSizeZ: 0.0
+  cameraSizeZ: 0.0,
+  angle: 0.83,
+  penumbra: 0,
+  intensity: 3
 };
 
-// gui.addColor(options, 'torusColor').onChange(function (e) {
-//   torus.material.color.set(e);
-// });
+gui.add(options, 'angle', 0, 1);
+gui.add(options, 'penumbra', 0, 1);
+gui.add(options, 'intensity', 0, 10);
 
-// gui.add(options, 'wireframe').onChange(function (e) {
-//   torus.material.wireframe = e;
-// });
+const bloomRenderScene = new RenderPass(scene, camera);
+const renderComposer = new EffectComposer(renderer);
+renderComposer.addPass(bloomRenderScene);
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  0.5,
+  0.1,
+  0.1
+);
+renderComposer.addPass(bloomPass);
 
-gui.add(options, 'speed', 0, 0.1);
+const mousePosition = new THREE.Vector2();
+window.addEventListener('mousemove', function (e) {
+  mousePosition.x = (e.clientX / window.innerWidth) / 2 - 1;
+  mousePosition.y = -(e.clientY / window.innerHeight) / 2 + 1;
+})
 
-
+const rayCaster = new THREE.Raycaster();
 
 function animate() {
-  // torus.rotation.x += 0.01;
-  // torus.rotation.y += 0.01;
-  // torus.rotation.z += 0.01;
 
-  step += options.speed;
-  // torus.position.y = 10 * Math.abs(Math.sin(step));
+  rayCaster.setFromCamera(mousePosition, camera);
+  const intersects = rayCaster.intersectObjects(scene.children);
+  console.log(intersects);
+  for (let i = 0; i < intersects.length; i++) {
+    if (intersects[i].object.id === heartID) {
+      intersects[i].object.material.color.set(0xf0c6ee);
+    }
+  }
 
-  // updateCameraDisplay();
+  spotLight.angle = options.angle;
+  spotLight.penumbra = options.penumbra;
+  spotLight.intensity = options.intensity;
+  sLightHelper.update();
   gui.updateDisplay();
-  renderer.render(scene, camera);
+
+  renderComposer.render();
+
+  requestAnimationFrame(animate);
 }
+
+animate();
 
 function setCameraDisplay() {
   gui.add(options, 'cameraX', -10.0, 10.0);
@@ -128,5 +175,5 @@ function updateCameraDisplay() {
   options.cameraSizeZ = camera.scale.z;
 }
 
-renderer.setAnimationLoop(animate)
+// renderer.setAnimationLoop(animate)
 
