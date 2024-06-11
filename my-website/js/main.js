@@ -94,8 +94,8 @@ function initWater() {
 
 
   const water = new Water(waterGeometry, {
-    color: 0x0082ad,
-    scale: 1,
+    color: 0x51a3f0,
+    scale: 2,
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
     textureHeight: 1024,
