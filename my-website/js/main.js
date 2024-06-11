@@ -7,7 +7,7 @@ import { Water } from 'three/examples/jsm/objects/Water.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.gltf', import.meta.url);
 
-const waterTexture = new URL('../images/waterdudv.jpg', import.meta.url);
+const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
 
 const degreeToRad = Math.PI / 180;
