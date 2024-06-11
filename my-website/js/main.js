@@ -3,14 +3,18 @@ import { GLTFLoader, OrbitControls } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
-import { Water } from 'three/addons/objects/Water2.js';
+import { Water } from 'three/examples/jsm/objects/Water.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.gltf', import.meta.url);
+
+const waterTexture = new URL('../images/waterdudv.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
 
 const degreeToRad = Math.PI / 180;
 
 const scene = new THREE.Scene();
+
+let water;
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -62,25 +66,49 @@ function initHelpers() {
 
 function initWater() {
 
-  const waterGeometry = new THREE.PlaneGeometry(50, 50);
+  const groundGeometry = new THREE.PlaneGeometry(50, 90);
+  const groundMaterial = new THREE.MeshStandardMaterial(0x000000);
+  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  ground.position.set(0, -2, 0);
+  ground.rotation.x = Math.PI * -0.5;
+  scene.add(ground);
 
-  const water = new Water(waterGeometry, {
-    color: 0x12aaed,
-    scale: 4,
-    flowDirection: new THREE.Vector2(1, 1),
+  const waterGeometry = new THREE.PlaneGeometry(50, 90)
+  const textureloader = new THREE.TextureLoader()
+
+  water = new Water(
+    waterGeometry, {
     textureWidth: 1024,
-    textureHeight: 1024
-  });
+    textureHeight: 1024,
+    waterNormals: textureloader.load(waterTexture, function (texture) {
 
-  water.position.y = 0.1;
+      texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+
+    }),
+    sunDirection: new THREE.Vector3(),
+    sunColor: 0x000000,
+    waterColor: 0x000000,
+    distortionScale: 1,
+    fog: false
+  })
+
   water.rotation.x = Math.PI * -0.5;
   scene.add(water);
 }
 
+function animateWater() {
+  water.material.uniforms['time'].value += 1.0 / 360.0;
+}
+
 function initLight() {
+  scene.background = new THREE.Color(0x03030f);
+
   const direct = new THREE.DirectionalLight(0xFFFFFF, 0.2);
   direct.position.set(5, -1, 3);
   scene.add(direct);
+
+  const sky = new THREE.AmbientLight(0xFFFFFF, 0.05);
+  scene.add(sky);
 }
 
 
@@ -180,6 +208,8 @@ window.addEventListener('mousemove', function (e) {
 function animate() {
   const heartModel = scene.getObjectByName('heart');
   heartModel.rotation.y += 0.01;
+
+  animateWater();
 
   renderComposer.render();
   cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
