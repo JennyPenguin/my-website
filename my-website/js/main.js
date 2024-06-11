@@ -76,7 +76,7 @@ function initWater() {
   const waterGeometry = new THREE.PlaneGeometry(50, 90);
   const textureloader = new THREE.TextureLoader();
 
-  // water = new Water(
+  // const water = new Water(
   //   waterGeometry, {
   //   textureWidth: 1024,
   //   textureHeight: 1024,
@@ -94,7 +94,7 @@ function initWater() {
 
 
   const water = new Water(waterGeometry, {
-    color: 0x12aaed,
+    color: 0x0082ad,
     scale: 1,
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
@@ -224,6 +224,7 @@ function animate() {
   // animateWater();
 
   renderComposer.render();
+  // renderer.render(scene, camera);
   cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
   requestAnimationFrame(animate);
 }
