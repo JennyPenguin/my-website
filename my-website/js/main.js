@@ -14,7 +14,7 @@ const degreeToRad = Math.PI / 180;
 
 const scene = new THREE.Scene();
 
-document.scrollY = 0;
+document.body.scrollY = 0;
 // let water;
 
 const renderer = new THREE.WebGLRenderer({
@@ -102,20 +102,35 @@ function initWater() {
     normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
     normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
   });
-  // y is last one
-  const water2 = new THREE.BoxGeometry(20, 50, 20);
-  const blue = new THREE.MeshStandardMaterial({ color: 0x51a3f0 });
-  const water2Mesh = new THREE.Mesh(water2, [blue, blue, blue, blue, blue, blue])
-  water2Mesh.castShadow = true;
-  water2Mesh.emissive = true;
 
-  water2Mesh.position.y = -10;
-  water2Mesh.position.z = 10;
-  water2Mesh.rotation.x = Math.PI * -0.5;
+  const waterBack = new Water(waterGeometry, {
+    color: 0x51a3f0,
+    scale: 2,
+    flowDirection: new THREE.Vector2(1, 1),
+    textureWidth: 1024,
+    textureHeight: 1024,
+    normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
+    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
+  });
+  // y is last one
+  // const water2 = new THREE.BoxGeometry(20, 50, 20);
+  // const blue = new THREE.MeshStandardMaterial({ color: 0x51a3f0 });
+  // const water2Mesh = new THREE.Mesh(water2, [blue, blue, blue, blue, blue, blue])
+  // water2Mesh.castShadow = true;
+  // water2Mesh.emissive = true;
+
+  // water2Mesh.position.y = -10;
+  // water2Mesh.position.z = 10;
+  // water2Mesh.rotation.x = Math.PI * -0.5;
+
   water.position.y = 0.45
   water.rotation.x = Math.PI * -0.5;
+  waterBack.position.y = 0.47
+  waterBack.rotation.x = Math.PI * 0.5;
+
   scene.add(water);
-  scene.add(water2Mesh);
+  scene.add(waterBack);
+  // scene.add(water2Mesh);
 }
 
 function animateWater(water) {
@@ -141,6 +156,7 @@ function moveCamDown() {
     camera.position.y -= 0.1;
   }
   this.oldScroll = this.scrollY;
+
 }
 
 
@@ -161,7 +177,7 @@ renderComposer.addPass(bloomPass);
 function loadModels() {
   modelLoader.load(hippoURL.href, function (gltf) {
     const model = gltf.scene;
-    model.position.set(0, 0.5, -1);
+    model.position.set(0, 1, -1);
     model.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = true;
