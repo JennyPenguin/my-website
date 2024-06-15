@@ -17,6 +17,12 @@ body {
   position: relative;
 }
 
+button {
+  position: absolute;
+  background: transparent;
+  color: #ffffff;
+}
+
 
 canvas {
   position: absolute;
@@ -24,41 +30,4 @@ canvas {
   height: 100vh;
   width: 100vw;
   z-index: -1;
-}
-
-nav {
-  height: 7vh;
-  background-color: #ffc0cb;
-  display: flex;
-  /* justify-content: space-between; */
-  align-items: center;
-  color: #ffffff;
-}
-
-.modelOverlay,
-.modelOverlay p {
-  background: transparent;
-  position: absolute;
-  margin: 0;
-  color: #ffffff;
-}
-
-.modelOverlay {
-  top: 50vh;
-  left: 6vw;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-}
-
-nav button {
-  background-color: inherit;
-  font-family: inherit;
-  border: none;
-  padding: 0 10px;
-  color: #fff;
-}
-
-p {
-  padding: 5px 20px;
 }
