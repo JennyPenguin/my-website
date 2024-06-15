@@ -21,7 +21,6 @@ const renderer = new THREE.WebGLRenderer({
 });
 
 
-
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
 
 const modelLoader = new GLTFLoader();
@@ -33,10 +32,11 @@ function init() {
 
   initRenderer();
   initCameraPos();
+  // initHelpers();
   initWater();
   initLight();
   loadModels();
-
+  document.body.onscroll = moveCamDown;
 }
 
 function initRenderer() {
@@ -47,15 +47,14 @@ function initRenderer() {
 }
 
 function initCameraPos() {
-  camera.position.set(16.619, 4.179, 5.491);
+  camera.position.set(17.273, 4.142, 7.114);
   camera.rotation.set(0, 87.86 * degreeToRad, 0);
   camera.updateProjectionMatrix();
 }
 
 function initHelpers() {
-  // const orbitControls = new OrbitControls(camera, renderer.domElement);
-  // const orbitControls = new OrbitControls(camera, renderer.domElement);
-  // orbitControls.update();
+  const orbitControls = new OrbitControls(camera, renderer.domElement);
+  orbitControls.update();
 
   // const axesHelper = new THREE.AxesHelper(30);
   // scene.add(axesHelper);
@@ -66,8 +65,8 @@ function initHelpers() {
 
 function initWater() {
 
-  const groundGeometry = new THREE.PlaneGeometry(100, 100);
-  const groundMaterial = new THREE.MeshStandardMaterial(0x09265a);
+  const groundGeometry = new THREE.BoxGeometry(100, 100, 20);
+  const groundMaterial = new THREE.MeshStandardMaterial(0x51a3f0);
   const ground = new THREE.Mesh(groundGeometry, groundMaterial);
   ground.position.set(0, -30, 0);
   ground.rotation.x = Math.PI * -0.5;
@@ -121,6 +120,12 @@ function initLight() {
 
   const sky = new THREE.AmbientLight(0xFFFFFF, 0.05);
   scene.add(sky);
+}
+
+function moveCamDown() {
+  const t = document.body.getBoundingClientRect().top;
+
+  camera.position.y -= 0.1;
 }
 
 
