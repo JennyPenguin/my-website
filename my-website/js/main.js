@@ -14,6 +14,10 @@ const degreeToRad = Math.PI / 180;
 
 const scene = new THREE.Scene();
 
+const clock = new THREE.Clock();
+
+let mixer;
+
 document.body.scrollY = 0;
 let waterBack;
 
@@ -48,7 +52,7 @@ function initRenderer() {
 }
 
 function initCameraPos() {
-  camera.position.set(17.273, 4.142, 7.114);
+  camera.position.set(17.273, 4.142, 5.114);
   camera.rotation.set(0, 87.86 * degreeToRad, 0);
   camera.updateProjectionMatrix();
 }
@@ -160,7 +164,19 @@ function loadModels() {
         o.castShadow = true;
       }
     });
+    // mixer = new THREE.AnimationMixer(model);
+    // mixer.clipAction(model.animations[0]).play();
+    mixer = new THREE.AnimationMixer(model);
+    mixer.clipAction(gltf.animations[0]).play();
     scene.add(model);
+    // const clips = gltf.animations;
+    // clips.forEach(function (clip) {
+    //   const action = mixer.clipAction(clip);
+    //   action.play();
+    // });
+    // const clip = THREE.AnimationClip.findByName(clips, 'spine4Action');
+    // const action = mixer.clipAction(clip);
+    // action.play();
   }, undefined, function (error) { console.error(); });
 
   modelLoader.load(heartURL.href, function (gltf) {
@@ -172,8 +188,8 @@ function loadModels() {
         o.castShadow = true;
       }
     });
-    heartModel.position.set(1.287, 2.001, 0);
-    const light = new THREE.PointLight(new THREE.Color(0xd79cf7), 2, 15, 0.5);
+    heartModel.position.set(1.287, 2.401, -2.75);
+    const light = new THREE.PointLight(new THREE.Color(0xd79cf7), 2.401, 15, 0.5);
     light.position.set(1.287, 2.401, 0.421);
     scene.add(light);
     heartModel.castShadow = true;
@@ -231,6 +247,10 @@ window.addEventListener('mousemove', function (e) {
 
 
 function animate() {
+  if (mixer) {
+    mixer.update(clock.getDelta());
+  }
+
   const heartModel = scene.getObjectByName('heart');
   heartModel.rotation.y += 0.01;
 
