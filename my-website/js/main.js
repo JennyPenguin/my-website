@@ -52,7 +52,7 @@ function initRenderer() {
 }
 
 function initCameraPos() {
-  camera.position.set(17.273, 4.142, 5.114);
+  camera.position.set(17.273, 5.641, 5.114);
   camera.rotation.set(0, 87.86 * degreeToRad, 0);
   camera.updateProjectionMatrix();
 }
@@ -189,8 +189,8 @@ function loadModels() {
       }
     });
     heartModel.position.set(1.287, 2.401, -2.75);
-    const light = new THREE.PointLight(new THREE.Color(0xd79cf7), 2.401, 15, 0.5);
-    light.position.set(1.287, 2.401, 0.421);
+    const light = new THREE.PointLight(new THREE.Color(0xE7A2E4), 1, 15, 0.5);
+    light.position.set(1.287, 2.451, -2.80);
     scene.add(light);
     heartModel.castShadow = true;
 
