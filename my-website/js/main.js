@@ -15,7 +15,7 @@ const degreeToRad = Math.PI / 180;
 const scene = new THREE.Scene();
 
 document.body.scrollY = 0;
-// let water;
+let waterBack;
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
@@ -76,22 +76,6 @@ function initWater() {
   const waterGeometry = new THREE.PlaneGeometry(50, 90);
   const textureloader = new THREE.TextureLoader();
 
-  // const water = new Water(
-  //   waterGeometry, {
-  //   textureWidth: 1024,
-  //   textureHeight: 1024,
-  //   waterNormals: textureloader.load(waterTexture, function (texture) {
-
-  //     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-
-  //   }),
-  //   sunDirection: new THREE.Vector3(),
-  //   sunColor: 0x000000,
-  //   waterColor: 0x000000,
-  //   distortionScale: 1,
-  //   fog: false
-  // })
-
 
   const water = new Water(waterGeometry, {
     color: 0x51a3f0,
@@ -103,8 +87,8 @@ function initWater() {
     normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
   });
 
-  const waterBack = new Water(waterGeometry, {
-    color: 0x51a3f0,
+  waterBack = new Water(waterGeometry, {
+    color: 0xaed4f8,
     scale: 2,
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
@@ -112,24 +96,17 @@ function initWater() {
     normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
     normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
   });
-  // y is last one
-  // const water2 = new THREE.BoxGeometry(20, 50, 20);
-  // const blue = new THREE.MeshStandardMaterial({ color: 0x51a3f0 });
-  // const water2Mesh = new THREE.Mesh(water2, [blue, blue, blue, blue, blue, blue])
-  // water2Mesh.castShadow = true;
-  // water2Mesh.emissive = true;
 
-  // water2Mesh.position.y = -10;
-  // water2Mesh.position.z = 10;
-  // water2Mesh.rotation.x = Math.PI * -0.5;
+  waterBack.name = "WaterBack";
 
   water.position.y = 0.45
   water.rotation.x = Math.PI * -0.5;
-  waterBack.position.y = 0.47
+
+  waterBack.position.y = 0.451
   waterBack.rotation.x = Math.PI * 0.5;
 
   scene.add(water);
-  scene.add(waterBack);
+  // scene.add(waterBack);
   // scene.add(water2Mesh);
 }
 
@@ -257,7 +234,11 @@ function animate() {
   const heartModel = scene.getObjectByName('heart');
   heartModel.rotation.y += 0.01;
 
-  // animateWater();
+  if (camera.position.y < 1.04 && !scene.getObjectByName(waterBack.name)) {
+    scene.add(waterBack)
+  } else if (camera.position.y >= 1.04 && scene.getObjectByName(waterBack.name)) {
+    scene.remove(scene.getObjectByName(waterBack.name))
+  }
 
   renderComposer.render();
   // renderer.render(scene, camera);

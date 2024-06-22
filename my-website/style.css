@@ -38,3 +38,7 @@ canvas {
   font-size: xx-large;
   color: #fff;
 }
+
+#cameraPos {
+  position: fixed;
+}
