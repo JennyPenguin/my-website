@@ -36,7 +36,7 @@ canvas {
   background: transparent;
   /* color: transparent; */
   font-size: xx-large;
-  color: #fff;
+  color: transparent;
 }
 
 #cameraPos {

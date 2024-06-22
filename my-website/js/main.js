@@ -5,7 +5,7 @@ import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
-const hippoURL = new URL('../models/hippo_lake.gltf', import.meta.url);
+const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
@@ -77,7 +77,7 @@ function initWater() {
   ground.rotation.x = Math.PI * -0.5;
   scene.add(ground);
 
-  const waterGeometry = new THREE.PlaneGeometry(50, 90);
+  const waterGeometry = new THREE.PlaneGeometry(70, 90);
   const textureloader = new THREE.TextureLoader();
 
 
@@ -158,25 +158,18 @@ renderComposer.addPass(bloomPass);
 function loadModels() {
   modelLoader.load(hippoURL.href, function (gltf) {
     const model = gltf.scene;
-    model.position.set(0, 1, -1);
+    model.position.set(0, 1, -3);
     model.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = true;
       }
     });
-    // mixer = new THREE.AnimationMixer(model);
-    // mixer.clipAction(model.animations[0]).play();
     mixer = new THREE.AnimationMixer(model);
-    mixer.clipAction(gltf.animations[0]).play();
+    // mixer.clipAction(gltf.animations[0]).play();
+
+    const clips = gltf.animations;
+    clips.forEach((clip) => mixer.clipAction(clip).play());
     scene.add(model);
-    // const clips = gltf.animations;
-    // clips.forEach(function (clip) {
-    //   const action = mixer.clipAction(clip);
-    //   action.play();
-    // });
-    // const clip = THREE.AnimationClip.findByName(clips, 'spine4Action');
-    // const action = mixer.clipAction(clip);
-    // action.play();
   }, undefined, function (error) { console.error(); });
 
   modelLoader.load(heartURL.href, function (gltf) {
