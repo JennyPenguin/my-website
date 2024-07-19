@@ -1,4 +1,7 @@
 import * as THREE from 'three';
+import { Mesh } from 'three';
+import { MeshStandardMaterial } from 'three';
+import { Color } from 'three';
 import { GLTFLoader, OrbitControls } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
@@ -13,6 +16,7 @@ const cameraGUI = document.getElementById('cameraPos');
 const degreeToRad = Math.PI / 180;
 
 const scene = new THREE.Scene();
+scene.background = new THREE.Color( 0x00010f);
 
 const clock = new THREE.Clock();
 
@@ -38,6 +42,7 @@ function init() {
   initRenderer();
   initCameraPos();
   // initHelpers();
+  initSky();
   initWater();
   initLight();
   loadModels();
@@ -68,6 +73,16 @@ function initHelpers() {
   // scene.add(gridHelper);
 }
 
+function initSky() {
+  const skyGeometry = new THREE.SphereGeometry( 24, 35, 35, 0, Math.PI*2, 0, Math.PI/2); 
+  const skyMaterial = new THREE.MeshBasicMaterial({color:0x000000});
+  skyMaterial.side = THREE.DoubleSide;
+  const skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
+  skyMesh.position.set(-5,-0.5,3);
+  // skyMesh.castShadow = true;
+  scene.add(skyMesh);
+}
+
 function initWater() {
 
   const groundGeometry = new THREE.BoxGeometry(100, 100, 20);
@@ -77,7 +92,7 @@ function initWater() {
   ground.rotation.x = Math.PI * -0.5;
   scene.add(ground);
 
-  const waterGeometry = new THREE.PlaneGeometry(70, 90);
+  const waterGeometry = new THREE.PlaneGeometry(100, 100);
   const textureloader = new THREE.TextureLoader();
 
 
