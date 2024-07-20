@@ -9,6 +9,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
+const mountURL = new URL('../models/mount.glb', import.meta.url);
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
@@ -33,6 +34,7 @@ const renderer = new THREE.WebGLRenderer({
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
 
 const modelLoader = new GLTFLoader();
+const textureloader = new THREE.TextureLoader();
 
 init();
 
@@ -74,11 +76,12 @@ function initHelpers() {
 }
 
 function initSky() {
-  const skyGeometry = new THREE.SphereGeometry( 24, 35, 35, 0, Math.PI*2, 0, Math.PI/2); 
+  const skyGeometry = new THREE.SphereGeometry( 30, 35, 35, 0, Math.PI*2, 0, Math.PI/2);
+  // const skyTexture = textureloader.load('../images/nightSky downloaded from game asset deals.jpg');
   const skyMaterial = new THREE.MeshBasicMaterial({color:0x000000});
   skyMaterial.side = THREE.DoubleSide;
   const skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
-  skyMesh.position.set(-5,-0.5,3);
+  skyMesh.position.set(-5,0,3);
   // skyMesh.castShadow = true;
   scene.add(skyMesh);
 }
@@ -93,7 +96,7 @@ function initWater() {
   scene.add(ground);
 
   const waterGeometry = new THREE.PlaneGeometry(100, 100);
-  const textureloader = new THREE.TextureLoader();
+  
 
 
   const water = new Water(waterGeometry, {
@@ -171,6 +174,18 @@ renderComposer.addPass(bloomPass);
 
 
 function loadModels() {
+  // modelLoader.load(mountURL.href, function (gltf) {
+  //   const model = gltf.scene;
+  //   model.position.set(0,0,0);
+  //   model.rotation.y = Math.PI * -0.75;
+  //   model.traverse((o) => {
+  //     if (o.isMesh) {
+  //       o.castShadow = true;
+  //     }
+  //   });
+  //   scene.add(model);
+  // }, undefined, function (error) { console.error(); });
+
   modelLoader.load(hippoURL.href, function (gltf) {
     const model = gltf.scene;
     model.position.set(0, 1, -3);
