@@ -9,6 +9,7 @@
 }
 
 body {
+  background-color: #000000;
   font-family: 'SpaceGrotesk';
   font-weight: bold;
   margin: 0;
@@ -41,4 +42,106 @@ canvas {
 
 #cameraPos {
   position: fixed;
+  display: none;
+}
+
+.section {
+  font-family: 'Lemon';
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color: #ffffff;
+  margin-left: 10vw;
+
+  text-shadow: 0 0 10px #e57bad,
+        0 0 20px #de5696,
+        0 0 40px #de5696,
+        0 0 80px #de5696,
+        0 0 160px #de5696;
+
+  
+  animation: fadeGlow 3s linear, slideIn 2s linear;
+
+  z-index: 10;
+  font-size: 2.2em;
+  letter-spacing: 1rem;
+}
+
+.section h2{
+  font-size: 100%;
+}
+
+.section h3 {
+  font-size: 50%;
+  line-height: 0.1rem;
+}
+
+
+/* Animations */
+
+@keyframes fadeGlow {
+  0% {
+      color: #000000;
+      text-shadow: none;
+  }
+  5% {
+    color: #e57bad;
+    text-shadow: none;
+  }
+
+  100% {
+      color: #ffffff;
+      text-shadow: 0 0 10px #e57bad,
+        0 0 20px #de5696,
+        0 0 40px #de5696,
+        0 0 80px #de5696,
+        0 0 160px #de5696;
+  }
+}
+
+@keyframes blinking {
+
+  12%,
+  50%,
+  72% {
+      color: #c8b4ff;
+      text-shadow: 0 0 10px #5e3bc1,
+          0 0 20px #5e3bc1,
+          0 0 40px #5e3bc1,
+  }
+
+  0%,
+  23%,
+  61%,
+  100% {
+      color: #ffffff;
+      text-shadow: 0 0 10px #5e3bc1,
+          0 0 20px #5e3bc1,
+          0 0 40px #5e3bc1,
+          0 0 80px #5e3bc1,
+          0 0 160px #5e3bc1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+      transform: translateY(-6rem);
+      filter: opacity(0) brightness(70%);
+  }
+  100% {
+    transform: translateY(0);
+    filter: opacity(1) brightness(100%);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+      filter: opacity(0) brightness(70%);
+  }
+
+  100% {
+      filter: opacity(100%) brightness(70%), drop-shadow(1rem 0.5rem 1rem #5235a9);
+  }
 }
