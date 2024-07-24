@@ -326,3 +326,11 @@ window.addEventListener('mousedown', function() {
 
 // renderer.setAnimationLoop(animate)
 
+
+function moveCamera() {
+  const t = document.body.getBoundingClientRect().top;
+  camera.position.y = startPos + t * 0.01;
+}
+
+document.body.onscroll = moveCamera;
+

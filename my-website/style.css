@@ -8,6 +8,10 @@
   src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf');
 }
 
+main {
+  position: absolute;
+}
+
 body {
   background-color: #000000;
   font-family: 'SpaceGrotesk';
@@ -45,14 +49,19 @@ canvas {
   display: none;
 }
 
-.grid-container {
-  font-family: 'Lemon';
+.empty {
   width: 100vw;
   height: 100vh;
+}
+
+.grid-container {
+  font-family: 'Lemon';
   display: grid;
   grid-template-rows: repeat(16, 1fr);
   grid-template-columns: repeat(16, 1fr);
   z-index: 1;
+  width: 100vw;
+  height: 100vh;
 }
 
 #name-intro {
