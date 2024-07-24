@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "dat.gui": "^0.7.9",
-    "fitty": "^2.4.2"
+    "fitty": "^2.4.2",
+    "gsap": "^3.12.5"
   }
 }

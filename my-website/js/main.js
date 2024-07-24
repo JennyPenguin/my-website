@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import gsap from 'gsap';
 import { Mesh } from 'three';
 import { MeshStandardMaterial } from 'three';
 import { Color } from 'three';
@@ -35,6 +36,8 @@ const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.inn
 
 const modelLoader = new GLTFLoader();
 const textureloader = new THREE.TextureLoader();
+let startPos = 5.641;
+let endPos = -25;
 
 init();
 
@@ -59,7 +62,7 @@ function initRenderer() {
 }
 
 function initCameraPos() {
-  camera.position.set(17.273, 5.641, 5.114);
+  camera.position.set(17.273, startPos, 5.114);
   camera.rotation.set(0, 87.86 * degreeToRad, 0);
   camera.updateProjectionMatrix();
 }
@@ -262,11 +265,7 @@ const options = {
 
 
 
-const mousePosition = new THREE.Vector2();
-window.addEventListener('mousemove', function (e) {
-  mousePosition.x = (e.clientX / window.innerWidth) / 2 - 1;
-  mousePosition.y = -(e.clientY / window.innerHeight) / 2 + 1;
-})
+
 
 
 function animate() {
@@ -294,10 +293,36 @@ window.addEventListener("resize", onWindowResize());
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
+  camera.updateProjectionMatrix();
 }
 
+const tl = gsap.timeline();
+
+window.addEventListener('mousedown', function() {
+  tl.to(camera.position, {
+    z: -5,
+    duration: 3,
+    onUpdate: function() {
+      // camera.lookAt(0,0,0);
+    }
+  }).to(camera.position, {
+    y:2, 
+    duration: 3,
+    onUpdate: function() {
+      // camera.lookAt(0,0,0);
+    }
+  }).to(camera.position, {
+    x:0,
+    y:-10,
+    z: 7, 
+    duration: 3,
+    onUpdate: function() {
+      // camera.lookAt(0,0,0);
+    }
+  });
+
+});
 
 // renderer.setAnimationLoop(animate)
 
