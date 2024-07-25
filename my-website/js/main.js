@@ -12,6 +12,11 @@ const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
 
+
+
+let heartModel, heartLight;
+let initHeartPos = [1.287, 2.451, -2.80];
+
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
 
@@ -206,7 +211,7 @@ function loadModels() {
   }, undefined, function (error) { console.error(); });
 
   modelLoader.load(heartURL.href, function (gltf) {
-    const heartModel = gltf.scene;
+    heartModel = gltf.scene;
     heartModel.traverse((o) => {
       if (o.isMesh) {
         o.material.emissive = new THREE.Color(0xE7A2E4);
@@ -215,9 +220,9 @@ function loadModels() {
       }
     });
     heartModel.position.set(1.287, 2.401, -2.75);
-    const light = new THREE.PointLight(new THREE.Color(0xE7A2E4), 1, 15, 0.5);
-    light.position.set(1.287, 2.451, -2.80);
-    scene.add(light);
+    heartLight = new THREE.PointLight(new THREE.Color(0xE7A2E4), 1, 15, 0.5);
+    heartLight.position.set(1.287, 2.451, -2.80);
+    scene.add(heartLight);
     heartModel.castShadow = true;
 
     scene.add(heartModel);
@@ -273,9 +278,8 @@ function animate() {
     mixer.update(clock.getDelta());
   }
 
-  const heartModel = scene.getObjectByName('heart');
   heartModel.rotation.y += 0.01;
-
+  
   if (camera.position.y < 1.04 && !scene.getObjectByName(waterBack.name)) {
     scene.add(waterBack)
   } else if (camera.position.y >= 1.04 && scene.getObjectByName(waterBack.name)) {
@@ -297,32 +301,7 @@ function onWindowResize() {
   camera.updateProjectionMatrix();
 }
 
-const tl = gsap.timeline();
 
-window.addEventListener('mousedown', function() {
-  tl.to(camera.position, {
-    z: -5,
-    duration: 3,
-    onUpdate: function() {
-      // camera.lookAt(0,0,0);
-    }
-  }).to(camera.position, {
-    y:2, 
-    duration: 3,
-    onUpdate: function() {
-      // camera.lookAt(0,0,0);
-    }
-  }).to(camera.position, {
-    x:0,
-    y:-10,
-    z: 7, 
-    duration: 3,
-    onUpdate: function() {
-      // camera.lookAt(0,0,0);
-    }
-  });
-
-});
 
 // renderer.setAnimationLoop(animate)
 
@@ -330,7 +309,41 @@ window.addEventListener('mousedown', function() {
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
   camera.position.y = startPos + t * 0.01;
+  heartModel.position.y = initHeartPos[1] + t * 0.01;
+  heartModel.position.x = initHeartPos[0] - t * 0.01;
+  heartModel.position.z = initHeartPos[2] - t * 0.01;
+  heartLight.position.set(heartModel.position.x, heartModel.position.y, heartModel.position.z);
 }
 
 document.body.onscroll = moveCamera;
+
+
+
+
+// const tl = gsap.timeline();
+
+// window.addEventListener('mousedown', function() {
+//   tl.to(camera.position, {
+//     z: -5,
+//     duration: 3,
+//     onUpdate: function() {
+//       // camera.lookAt(0,0,0);
+//     }
+//   }).to(camera.position, {
+//     y:2, 
+//     duration: 3,
+//     onUpdate: function() {
+//       // camera.lookAt(0,0,0);
+//     }
+//   }).to(camera.position, {
+//     x:0,
+//     y:-10,
+//     z: 7, 
+//     duration: 3,
+//     onUpdate: function() {
+//       // camera.lookAt(0,0,0);
+//     }
+//   });
+
+// });
 
