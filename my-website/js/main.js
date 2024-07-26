@@ -11,11 +11,14 @@ import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
+const underwaterURL = new URL('../models/underwater_scene.glb', import.meta.url);
 
 
 
 let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
+let pearlAction;
+let pearlPlayed = false;
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
@@ -56,7 +59,6 @@ function init() {
   initWater();
   initLight();
   loadModels();
-  document.body.onscroll = moveCamDown;
 }
 
 function initRenderer() {
@@ -96,12 +98,12 @@ function initSky() {
 
 function initWater() {
 
-  const groundGeometry = new THREE.BoxGeometry(100, 100, 20);
-  const groundMaterial = new THREE.MeshStandardMaterial(0x51a3f0);
-  const ground = new THREE.Mesh(groundGeometry, groundMaterial);
-  ground.position.set(0, -30, 0);
-  ground.rotation.x = Math.PI * -0.5;
-  scene.add(ground);
+  // const groundGeometry = new THREE.BoxGeometry(100, 100, 20);
+  // const groundMaterial = new THREE.MeshStandardMaterial(0x51a3f0);
+  // const ground = new THREE.Mesh(groundGeometry, groundMaterial);
+  // ground.position.set(0, -30, 0);
+  // ground.rotation.x = Math.PI * -0.5;
+  // scene.add(ground);
 
   const waterGeometry = new THREE.PlaneGeometry(100, 100);
   
@@ -136,8 +138,6 @@ function initWater() {
   waterBack.rotation.x = Math.PI * 0.5;
 
   scene.add(water);
-  // scene.add(waterBack);
-  // scene.add(water2Mesh);
 }
 
 function animateWater(water) {
@@ -155,16 +155,6 @@ function initLight() {
   scene.add(sky);
 }
 
-function moveCamDown() {
-  const t = document.body.getBoundingClientRect().top;
-  if (this.oldScroll > this.scrollY) {
-    camera.position.y += 0.1;
-  } else {
-    camera.position.y -= 0.1;
-  }
-  this.oldScroll = this.scrollY;
-
-}
 
 
 const bloomRenderScene = new RenderPass(scene, camera);
@@ -182,18 +172,6 @@ renderComposer.addPass(bloomPass);
 
 
 function loadModels() {
-  // modelLoader.load(mountURL.href, function (gltf) {
-  //   const model = gltf.scene;
-  //   model.position.set(0,0,0);
-  //   model.rotation.y = Math.PI * -0.75;
-  //   model.traverse((o) => {
-  //     if (o.isMesh) {
-  //       o.castShadow = true;
-  //     }
-  //   });
-  //   scene.add(model);
-  // }, undefined, function (error) { console.error(); });
-
   modelLoader.load(hippoURL.href, function (gltf) {
     const model = gltf.scene;
     model.position.set(0, 1, -3);
@@ -227,6 +205,21 @@ function loadModels() {
 
     scene.add(heartModel);
     animate();
+  }, undefined, function (error) { console.error(); });
+
+  modelLoader.load(underwaterURL.href, function (gltf) {
+    const model = gltf.scene;
+    model.position.set(2, -20, 5);
+    model.traverse((o) => {
+      if (o.isMesh) {
+        o.castShadow = true;
+      }
+    });
+    mixer = new THREE.AnimationMixer(model);
+    mixer.clipAction(gltf.animations[0]).play();
+    mixer.clipAction(gltf.animations[1]).play();
+    pearlAction = mixer.clipAction(gltf.animations[2]);
+    scene.add(model);
   }, undefined, function (error) { console.error(); });
 }
 
@@ -284,6 +277,13 @@ function animate() {
     scene.add(waterBack)
   } else if (camera.position.y >= 1.04 && scene.getObjectByName(waterBack.name)) {
     scene.remove(scene.getObjectByName(waterBack.name))
+  }
+
+  if (camera.position.y < -5 && !pearlPlayed) {
+    pearlAction.clampWhenFinished = true;
+    pearlAction.loop = THREE.LoopOnce;
+    pearlAction.play();
+    pearlPlayed = true;
   }
 
   renderComposer.render();
