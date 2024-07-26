@@ -30,7 +30,7 @@ scene.background = new THREE.Color( 0x00010f);
 
 const clock = new THREE.Clock();
 
-let mixer;
+let hippoMixer, underwaterMixer;
 
 document.body.scrollY = 0;
 let waterBack;
@@ -180,11 +180,11 @@ function loadModels() {
         o.castShadow = true;
       }
     });
-    mixer = new THREE.AnimationMixer(model);
+    hippoMixer = new THREE.AnimationMixer(model);
     // mixer.clipAction(gltf.animations[0]).play();
 
     const clips = gltf.animations;
-    clips.forEach((clip) => mixer.clipAction(clip).play());
+    clips.forEach((clip) => hippoMixer.clipAction(clip).play());
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 
@@ -215,10 +215,10 @@ function loadModels() {
         o.castShadow = true;
       }
     });
-    mixer = new THREE.AnimationMixer(model);
-    mixer.clipAction(gltf.animations[0]).play();
-    mixer.clipAction(gltf.animations[1]).play();
-    pearlAction = mixer.clipAction(gltf.animations[2]);
+    underwaterMixer = new THREE.AnimationMixer(model);
+    underwaterMixer.clipAction(gltf.animations[0]).play();
+    underwaterMixer.clipAction(gltf.animations[1]).play();
+    pearlAction = underwaterMixer.clipAction(gltf.animations[2]);
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 }
@@ -267,8 +267,13 @@ const options = {
 
 
 function animate() {
-  if (mixer) {
-    mixer.update(clock.getDelta());
+  let time = clock.getDelta();
+  if (hippoMixer) {
+    hippoMixer.update(time);
+  }
+
+  if (underwaterMixer) {
+   underwaterMixer.update(time);
   }
 
   heartModel.rotation.y += 0.01;
