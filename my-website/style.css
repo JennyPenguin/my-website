@@ -101,7 +101,7 @@ canvas {
         0 0 160px #de5696;
 
   
-  animation: fadeGlow 3s linear, slideIn 2s linear;
+  animation: fadeGlow 1s linear, slideIn 1s linear;
   /* make animation happen when viewed instead of load */
   /* animation-timeline: view(); */
   /* make animation happen as soon as it's o% in viewport and finishes when it's 40% through view*/

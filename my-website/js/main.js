@@ -17,7 +17,7 @@ let skyMesh, waterSky;
 
 let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
-let pearlAction, oceanBlueLight;
+let pearlAction, oceanBlueLight, oceanBlueLight2;
 let pearlPlayed = false;
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
@@ -111,20 +111,6 @@ function initWater() {
 
   waterBack.name = "waterBack";
 
-  waterSky = new Water(waterGeometry, {
-    color: 0xffffff,
-    scale: 1,
-    textureWidth: 1024,
-    textureHeight: 1024,
-    normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
-    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
-  });
-
-  waterSky.material.opacity = 0.05;
-
-  waterSky.position.set(7.5,0.45,0);
-  waterSky.rotation.x = Math.PI * -0.5;
-  waterSky.rotation.y = Math.PI * 0.5;
 
 
   water.position.y = 0.45
@@ -148,7 +134,10 @@ function initLight() {
   scene.add(sky);
 
   oceanBlueLight = new THREE.AmbientLight(0x04468e, 1);
+  oceanBlueLight = new THREE.PointLight(0x000000, 1, 30);
+  oceanBlueLight2 = new THREE.AmbientLight(0xffffff, 0.8);
   oceanBlueLight.position.set(0,-10,0);
+  oceanBlueLight2.position.set(0,-10,0);
 
 }
 
@@ -206,7 +195,7 @@ function loadModels() {
 
   modelLoader.load(underwaterURL.href, function (gltf) {
     const model = gltf.scene;
-    model.position.set(2, -17, 5);
+    model.position.set(2, -17.5, 5);
     model.traverse((o) => {
       if (o.isMesh) {
         o.castShadow = true;
@@ -232,20 +221,22 @@ function animate() {
 
   heartModel.rotation.y += 0.01;
   
-  if (camera.position.y < 1.04 && !scene.getObjectByName(waterBack.name)) {
-    scene.fog = new THREE.Fog( 0x030e22, 26, 30 );
+  if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
+    scene.fog = new THREE.FogExp2( 0x51a3f0, 0.005 );
     scene.add(waterBack)
     scene.remove(skyMesh);
     // scene.add(waterSky);
-    scene.add(oceanBlueLight);
-    scene.background = new THREE.Color( 0x030e22);
-  } else if (camera.position.y >= 1.04 && scene.getObjectByName(waterBack.name)) {
+    // scene.add(oceanBlueLight);
+    // scene.add(oceanBlueLight2);
+    scene.background = new THREE.Color( 0x1d519c);
+  } else if (camera.position.y >= 0.55 && scene.getObjectByName(waterBack.name)) {
     scene.fog.emissiveIntensity = 0;
     scene.fog = new THREE.Fog( 0x000000, 26, 30 );
     scene.remove(waterBack);
     scene.add(skyMesh);
     // scene.remove(waterSky);
-    scene.remove(oceanBlueLight);
+    // scene.remove(oceanBlueLight);
+    // scene.remove(oceanBlueLight2);
     scene.background = new THREE.Color( 0x00010f);
   }
 
