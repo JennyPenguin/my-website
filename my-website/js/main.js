@@ -11,7 +11,7 @@ import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
-const underwaterURL = new URL('../models/underwater_scene.glb', import.meta.url);
+const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 
 
 
@@ -218,7 +218,7 @@ function loadModels() {
     underwaterMixer = new THREE.AnimationMixer(model);
     underwaterMixer.clipAction(gltf.animations[0]).play();
     underwaterMixer.clipAction(gltf.animations[1]).play();
-    pearlAction = underwaterMixer.clipAction(gltf.animations[2]);
+    pearlAction = gltf.animations;
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 }
@@ -285,16 +285,30 @@ function animate() {
   }
 
   if (camera.position.y < -5 && !pearlPlayed) {
-    pearlAction.clampWhenFinished = true;
-    pearlAction.loop = THREE.LoopOnce;
-    pearlAction.play();
+    for (let i=2; i<pearlAction.length; i++) {
+      playOnce(pearlAction[i]);
+    }
+    // pearlAction.forEach((clip) => playOnce);
+    // underwaterMixer.clipAction(gltf.animations[2])
+    // pearlAction.clampWhenFinished = true;
+    // pearlAction.loop = THREE.LoopOnce;
+    // pearlAction.play();
     pearlPlayed = true;
   }
+
+
 
   renderComposer.render();
   // renderer.render(scene, camera);
   cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
   requestAnimationFrame(animate);
+}
+
+function playOnce(clip) {
+    let action = underwaterMixer.clipAction(clip)
+    action.clampWhenFinished = true;
+    action.loop = THREE.LoopOnce;
+    action.play();
 }
 
 
