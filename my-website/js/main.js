@@ -13,11 +13,11 @@ const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 
-
+let skyMesh, waterSky;
 
 let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
-let pearlAction;
+let pearlAction, oceanBlueLight;
 let pearlPlayed = false;
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
@@ -74,32 +74,20 @@ function initCameraPos() {
   camera.updateProjectionMatrix();
 }
 
-function initHelpers() {
-  const orbitControls = new OrbitControls(camera, renderer.domElement);
-  orbitControls.update();
-
-  // const axesHelper = new THREE.AxesHelper(30);
-  // scene.add(axesHelper);
-
-  // const gridHelper = new THREE.GridHelper(30);
-  // scene.add(gridHelper);
-}
-
 function initSky() {
   const skyGeometry = new THREE.SphereGeometry( 30, 35, 35, 0, Math.PI*2, 0, Math.PI/2);
   // const skyTexture = textureloader.load('../images/nightSky downloaded from game asset deals.jpg');
   const skyMaterial = new THREE.MeshBasicMaterial({color:0x000000});
   skyMaterial.side = THREE.DoubleSide;
-  const skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
+  skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
   skyMesh.position.set(-5,0,3);
+
   // skyMesh.castShadow = true;
   scene.add(skyMesh);
 }
 
 function initWater() {
   const waterGeometry = new THREE.PlaneGeometry(100, 100);
-  
-
 
   const water = new Water(waterGeometry, {
     color: 0x51a3f0,
@@ -112,7 +100,7 @@ function initWater() {
   });
 
   waterBack = new Water(waterGeometry, {
-    color: 0xaed4f8,
+    color: 0x9cdae5,
     scale: 2,
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
@@ -121,13 +109,30 @@ function initWater() {
     normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
   });
 
-  waterBack.name = "WaterBack";
+  waterBack.name = "waterBack";
+
+  waterSky = new Water(waterGeometry, {
+    color: 0xffffff,
+    scale: 1,
+    textureWidth: 1024,
+    textureHeight: 1024,
+    normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
+    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
+  });
+
+  waterSky.material.opacity = 0.05;
+
+  waterSky.position.set(7.5,0.45,0);
+  waterSky.rotation.x = Math.PI * -0.5;
+  waterSky.rotation.y = Math.PI * 0.5;
+
 
   water.position.y = 0.45
   water.rotation.x = Math.PI * -0.5;
 
-  waterBack.position.y = 0.451
+  waterBack.position.y = 0.451;
   waterBack.rotation.x = Math.PI * 0.5;
+  // water.position.x = 7.5;
 
   scene.add(water);
 }
@@ -141,6 +146,14 @@ function initLight() {
 
   const sky = new THREE.AmbientLight(0xFFFFFF, 0.05);
   scene.add(sky);
+
+  oceanBlueLight = new THREE.AmbientLight(0x04468e, 1);
+  oceanBlueLight.position.set(0,-10,0);
+
+}
+
+function initBloom() {
+  
 }
 
 const bloomRenderScene = new RenderPass(scene, camera);
@@ -220,9 +233,20 @@ function animate() {
   heartModel.rotation.y += 0.01;
   
   if (camera.position.y < 1.04 && !scene.getObjectByName(waterBack.name)) {
+    scene.fog = new THREE.Fog( 0x030e22, 26, 30 );
     scene.add(waterBack)
+    scene.remove(skyMesh);
+    // scene.add(waterSky);
+    scene.add(oceanBlueLight);
+    scene.background = new THREE.Color( 0x030e22);
   } else if (camera.position.y >= 1.04 && scene.getObjectByName(waterBack.name)) {
-    scene.remove(scene.getObjectByName(waterBack.name))
+    scene.fog.emissiveIntensity = 0;
+    scene.fog = new THREE.Fog( 0x000000, 26, 30 );
+    scene.remove(waterBack);
+    scene.add(skyMesh);
+    // scene.remove(waterSky);
+    scene.remove(oceanBlueLight);
+    scene.background = new THREE.Color( 0x00010f);
   }
 
   if (camera.position.y < -2 && !pearlPlayed) {
