@@ -3,7 +3,7 @@ import gsap from 'gsap';
 import { Mesh } from 'three';
 import { MeshStandardMaterial } from 'three';
 import { Color } from 'three';
-import { GLTFLoader, OrbitControls } from 'three/examples/jsm/Addons.js';
+import { GLTFLoader, OrbitControls, ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
@@ -11,9 +11,9 @@ import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
-const underwaterURL = new URL('../models/underwater2.glb', import.meta.url);
+const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 
-let skyMesh, waterSky, waterSpotLight, lightHelper;
+let skyMesh, waterSpotLight, waterSpotLight2;
 
 let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
@@ -130,7 +130,7 @@ function initWater() {
 
 function initUnderwaterDynamics() {
   // code from three.js examples
-  const filenames = [ 'Water_pattern.png', 'disturb.jpg'];
+  const filenames = [ 'Water_pattern.png'];
 
 				const textures = { none: null };
 
@@ -147,15 +147,14 @@ function initUnderwaterDynamics() {
 
 				}
 
-				waterSpotLight = new THREE.SpotLight( 0xffffff, 1000);
-				waterSpotLight.position.set( -4,0,  3);
+				waterSpotLight = new THREE.SpotLight( 0xffffff, 30);
+				waterSpotLight.position.set( -5,0,  -10);
         
-				waterSpotLight.angle = Math.PI/2.5;
-				waterSpotLight.penumbra = 1;
-				waterSpotLight.decay = 2;
-				waterSpotLight.distance = 30;
-				// waterSpotLight.map = textures[ 'disturb.jpg'];
-        waterSpotLight.map = textureloader.load(new URL('../images/Water_pattern 2.png', import.meta.url)  )
+				waterSpotLight.angle = Math.PI/4;
+				waterSpotLight.penumbra = 0.5;
+				waterSpotLight.decay = 1;
+				waterSpotLight.distance = 50;
+				waterSpotLight.map = textures[  'Water_pattern.png'];
 
 				waterSpotLight.castShadow = true;
 				waterSpotLight.shadow.mapSize.width = 1024;
@@ -166,14 +165,35 @@ function initUnderwaterDynamics() {
 				
 
         const targetObject = new THREE.Object3D(); 
-        targetObject.position.set(-4, -18, 3);
+        targetObject.position.set(-3, -18, -10);
         scene.add(targetObject);
 
         waterSpotLight.target = targetObject;
         scene.add( waterSpotLight );
 
-        lightHelper = new THREE.SpotLightHelper( waterSpotLight );
-				scene.add( lightHelper );
+        // secpmd pme
+
+        waterSpotLight2 = new THREE.SpotLight( 0xffffff, 40);
+        
+				waterSpotLight2.angle = Math.PI/3.5;
+				waterSpotLight2.penumbra = 0.5;
+				waterSpotLight2.decay = 1;
+				waterSpotLight2.distance = 70;
+				waterSpotLight2.map = textures[  'Water_pattern.png'];
+
+				waterSpotLight2.castShadow = true;
+				waterSpotLight2.shadow.mapSize.width = 1024;
+				waterSpotLight2.shadow.mapSize.height = 1024;
+				waterSpotLight2.shadow.camera.near = 1;
+				waterSpotLight2.shadow.camera.far = 10;
+				waterSpotLight2.shadow.focus = 1;
+        waterSpotLight2.position.set(-2, 0, 18);
+
+        const targetObject2 = new THREE.Object3D(); 
+        targetObject2.position.set(-3, -18, 20);
+        waterSpotLight2.target = targetObject2;
+        scene.add(targetObject2);
+        scene.add(waterSpotLight2);
 }
 
 function initLight() {
@@ -280,23 +300,22 @@ function animate() {
 	waterSpotLight.position.x = Math.cos( timer ) * 2.5;
 	waterSpotLight.position.z = Math.sin( timer ) * 2.5;
 
+  waterSpotLight2.position.x = Math.cos( timer ) * 2.5;
+	waterSpotLight2.position.z = Math.sin( timer ) * 2.5;
+
   heartModel.rotation.y += 0.01;
   
   if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
-    // scene.fog = new THREE.FogExp2( 0x51a3f0, 0.005 );
+    scene.fog = new THREE.FogExp2( 0x51a3f0, 0.005 );
     scene.add(waterBack)
     scene.remove(skyMesh);
-    // scene.add(waterSky);
-    // scene.add(oceanBlueLight);
     // scene.add(oceanBlueLight2);
     scene.background = new THREE.Color( 0x1d519c);
   } else if (camera.position.y >= 0.55 && scene.getObjectByName(waterBack.name)) {
-    // scene.fog.emissiveIntensity = 0;
-    // scene.fog = new THREE.Fog( 0x000000, 26, 30 );
+    scene.fog.emissiveIntensity = 0;
+    scene.fog = new THREE.Fog( 0x000000, 26, 30 );
     scene.remove(waterBack);
     scene.add(skyMesh);
-    // scene.remove(waterSky);
-    // scene.remove(oceanBlueLight);
     // scene.remove(oceanBlueLight2);
     scene.background = new THREE.Color( 0x00010f);
   }
@@ -309,7 +328,6 @@ function animate() {
   }
 
 
-  lightHelper.update();
   renderComposer.render();
   // renderer.render(scene, camera);
   cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
