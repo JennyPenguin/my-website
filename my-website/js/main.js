@@ -12,8 +12,10 @@ const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
-
 let skyMesh, waterSpotLight, waterSpotLight2;
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
 
 let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
@@ -361,33 +363,49 @@ function moveCamera() {
 
 document.body.onscroll = moveCamera;
 
+function onPointerMove( event ) {
+
+	// calculate pointer position in normalized device coordinates
+	// (-1 to +1) for both components
+
+	pointer.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
+}
 
 
+function render() {
 
-// const tl = gsap.timeline();
+	// update the picking ray with the camera and pointer position
+	raycaster.setFromCamera( pointer, camera );
 
-// window.addEventListener('mousedown', function() {
-//   tl.to(camera.position, {
-//     z: -5,
-//     duration: 3,
-//     onUpdate: function() {
-//       // camera.lookAt(0,0,0);
-//     }
-//   }).to(camera.position, {
-//     y:2, 
-//     duration: 3,
-//     onUpdate: function() {
-//       // camera.lookAt(0,0,0);
-//     }
-//   }).to(camera.position, {
-//     x:0,
-//     y:-10,
-//     z: 7, 
-//     duration: 3,
-//     onUpdate: function() {
-//       // camera.lookAt(0,0,0);
-//     }
-//   });
+	// calculate objects intersecting the picking ray
+	const intersects = raycaster.intersectObjects( scene.children );
 
-// });
+	for ( let i = 0; i < intersects.length; i ++ ) {
+
+		if (intersects[ i ].object.name.substring(0, 6) == "bubble") {
+      zoomTo(intersects[ i ].object);
+    }
+
+	}
+
+	renderer.render( scene, camera );
+
+}
+
+window.addEventListener( 'pointermove', onPointerMove );
+window.addEventListener( 'click', render );
+
+function zoomTo(object) {
+  const tl = gsap.timeline();
+  const pos = object.position;
+  tl.to(camera.position, {
+    x: pos.x,
+    y: pos.y-camera.height,
+    z: pos.z,
+    duration: 2
+  })
+}
+
+
 
