@@ -148,7 +148,7 @@ function initUnderwaterDynamics() {
 				}
 
 				waterSpotLight = new THREE.SpotLight( 0xffffff, 30);
-				waterSpotLight.position.set( -5,0,  -10);
+				waterSpotLight.position.set( -4,0,  -10);
         
 				waterSpotLight.angle = Math.PI/4;
 				waterSpotLight.penumbra = 0.5;
