@@ -360,7 +360,7 @@ else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
     pearlPlayed = true;
   }
 
-
+  window.addEventListener("resize", onWindowResize, false);
   renderComposer.render();
   // renderer.render(scene, camera);
   cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
@@ -375,12 +375,12 @@ function playOnce(clip) {
 }
 
 
-window.addEventListener("resize", onWindowResize());
+
 
 function onWindowResize() {
   camera.aspect = window.innerWidth / window.innerHeight;
-  renderer.setSize(window.innerWidth, window.innerHeight);
   camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
 function moveCamera() {
