@@ -218,7 +218,7 @@ function initLight() {
 
   oceanBlueLight = new THREE.AmbientLight(0x04468e, 1);
   oceanBlueLight = new THREE.PointLight(0x000000, 1, 30);
-  oceanBlueLight2 = new THREE.AmbientLight(0xffffff, 0.8);
+  oceanBlueLight2 = new THREE.AmbientLight(0xffffff, 0.2);
   oceanBlueLight.position.set(0,-10,0);
   oceanBlueLight2.position.set(0,-10,0);
 
@@ -321,14 +321,14 @@ function animate() {
     scene.fog = new THREE.FogExp2( 0x51a3f0, 0.005 );
     scene.add(waterBack)
     scene.remove(skyMesh);
-    // scene.add(oceanBlueLight2);
+    scene.add(oceanBlueLight2);
     scene.background = new THREE.Color( 0x1d519c);
   } else if (camera.position.y >= 0.55 && scene.getObjectByName(waterBack.name)) {
     scene.fog.emissiveIntensity = 0;
     scene.fog = new THREE.Fog( 0x000000, 26, 30 );
     scene.remove(waterBack);
     scene.add(skyMesh);
-    // scene.remove(oceanBlueLight2);
+    scene.remove(oceanBlueLight2);
     scene.background = new THREE.Color( 0x00010f);
   }
 
@@ -421,6 +421,8 @@ function zoomTo(object) {
 function show() {
   document.getElementById("vr").classList.remove("noView");
   document.getElementById("vr").classList.add("fadeIn");
+  document.getElementById('backButton').classList.remove("noView");
+  document.getElementById('backButton').classList.add("fadeIn");
 }
 
 

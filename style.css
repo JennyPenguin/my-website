@@ -44,6 +44,15 @@ canvas {
   color: transparent;
 }
 
+#backButton {
+  z-index: 10;
+  position: fixed;
+  left: 54vw;
+  top: 4vh;
+  background-color: #f998bb;
+  font-size: large;
+}
+
 .noView {
   display: none;
 }
@@ -64,6 +73,7 @@ canvas {
 }
 
 .project {
+  position: relative;
   background-color: #ffffff;
   padding: 0px 12px;
   border-radius: 15px;
