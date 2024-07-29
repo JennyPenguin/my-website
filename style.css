@@ -1,0 +1,263 @@
+@font-face {
+  font-family: "Lemon";
+  src: url('../fonts/Lemon-Regular.ttf');
+}
+
+@font-face {
+  font-family: "SpaceGrotesk";
+  src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf');
+}
+
+main {
+  position: absolute;
+}
+
+body {
+  background-color: #000000;
+  font-family: 'SpaceGrotesk';
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  /* overflow: hidden; */
+  position: relative;
+}
+
+button {
+  position: absolute;
+  background: transparent;
+  color: #ffffff;
+}
+
+
+canvas {
+  position: fixed;
+  box-sizing: border-box;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+}
+
+.transparent {
+  background: transparent;
+  /* color: transparent; */
+  font-size: xx-large;
+  color: transparent;
+}
+
+.noView {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  overflow-y: scroll;
+  width: 55vw;
+  height: 95vh;
+  background-color: #fff6fd;
+  outline: rgb(255, 229, 245, 0.8) solid 10px;
+  z-index: 5;
+  margin: 2.5vh 2vw;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 2;
+}
+
+.project {
+  background-color: #ffffff;
+  padding: 0px 12px;
+  border-radius: 15px;
+}
+
+
+.project h3 {
+  text-decoration: underline;
+  padding: 0;
+}
+
+.showcase h3 {
+  margin-left: 12.5%;
+  text-decoration: none;
+}
+
+.carousel {
+  width: 75%;
+  margin: auto;
+  position: relative;
+}
+
+.carousel button {
+  border: none;
+  position: absolute;
+  color: #000000;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  font-size: xx-large;
+}
+
+.left {
+  left: -5%;
+}
+
+.right {
+  right: -5%
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay h1 {
+  padding: 10px 20px;
+  color: #df00a3;
+}
+
+.fadeIn {
+  animation: appear 0.5s linear;
+}
+
+#cameraPos {
+  position: fixed;
+  display: none;
+}
+
+.empty {
+  width: 100vw;
+  height: 100vh;
+}
+
+.grid-container {
+  font-family: 'Lemon';
+  display: grid;
+  grid-template-rows: repeat(16, 1fr);
+  grid-template-columns: repeat(16, 1fr);
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+}
+
+#name-intro {
+  grid-area: 6 / 2 / 8 / 9;
+  font-size: 2rem;
+  margin: auto;
+}
+
+.grid-container h2{
+  font-size: 1.2rem;
+  margin-left: auto;
+  margin-right: auto;
+  grid-area: 8 / 4 / 9 / 9;
+}
+
+.grid-container h3 {
+  font-size: 0.7rem;
+  margin-left: auto;
+  margin-right: auto;
+  grid-area: 9 / 4 / 10 / 9;
+  letter-spacing: 0.9em;
+}
+
+/* effects */
+
+.large {
+  font-size: 100%;
+  letter-spacing: 0.6em;
+}
+
+.neon {
+  color: #ffffff;
+  text-shadow: 0 0 10px #e57bad,
+        0 0 20px #de5696,
+        0 0 40px #de5696,
+        0 0 80px #de5696,
+        0 0 160px #de5696;
+
+  
+  animation: fadeGlow 1s linear, slideIn 1s linear;
+  /* make animation happen when viewed instead of load */
+  /* animation-timeline: view(); */
+  /* make animation happen as soon as it's o% in viewport and finishes when it's 40% through view*/
+  /* animation-range: entry 0 cover 40%;  */
+}
+
+
+
+
+/* Animations */
+
+@keyframes fadeGlow {
+  0% {
+      color: #000000;
+      text-shadow: none;
+  }
+  5% {
+    color: #e57bad;
+    text-shadow: none;
+  }
+
+  100% {
+      color: #ffffff;
+      text-shadow: 0 0 10px #e57bad,
+        0 0 20px #de5696,
+        0 0 40px #de5696,
+        0 0 80px #de5696,
+        0 0 160px #de5696;
+  }
+}
+
+@keyframes appear {
+  from  {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes blinking {
+
+  12%,
+  50%,
+  72% {
+      color: #c8b4ff;
+      text-shadow: 0 0 10px #5e3bc1,
+          0 0 20px #5e3bc1,
+          0 0 40px #5e3bc1,
+  }
+
+  0%,
+  23%,
+  61%,
+  100% {
+      color: #ffffff;
+      text-shadow: 0 0 10px #5e3bc1,
+          0 0 20px #5e3bc1,
+          0 0 40px #5e3bc1,
+          0 0 80px #5e3bc1,
+          0 0 160px #5e3bc1;
+  }
+}
+
+@keyframes slideIn {
+  0% {
+      transform: translateY(-6rem);
+      filter: opacity(0) brightness(70%);
+  }
+  100% {
+    transform: translateY(0);
+    filter: opacity(1) brightness(100%);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+      filter: opacity(0) brightness(70%);
+  }
+
+  100% {
+      filter: opacity(100%) brightness(70%), drop-shadow(1rem 0.5rem 1rem #5235a9);
+  }
+}
