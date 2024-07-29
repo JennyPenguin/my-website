@@ -1,11 +1,11 @@
 @font-face {
   font-family: "Lemon";
-  src: url('../fonts/Lemon-Regular.ttf');
+  src: url('fonts/Lemon-Regular.ttf');
 }
 
 @font-face {
   font-family: "SpaceGrotesk";
-  src: url('../fonts/SpaceGrotesk-VariableFont_wght.ttf');
+  src: url('fonts/SpaceGrotesk-VariableFont_wght.ttf');
 }
 
 main {
