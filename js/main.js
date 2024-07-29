@@ -9,6 +9,7 @@ const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
+const caveURL = new URL('../models/cave.glb', import.meta.url);
 import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
 
 let skyMesh, waterSpotLight, waterSpotLight2;
@@ -68,10 +69,10 @@ function init() {
   initSky();
   initWater();
   initLight();
-   initUnderwaterDynamics();
   loadModels();
-  const axisH = new THREE.AxesHelper();
-  scene.add(axisH);
+  // initCaveWall();
+  // const axisH = new THREE.AxesHelper();
+  // scene.add(axisH);
 }
 
 function initRenderer() {
@@ -216,14 +217,22 @@ function initLight() {
 
   const sky = new THREE.AmbientLight(0xFFFFFF, 0.05);
   scene.add(sky);
-
+  // for some reason, code stops working if
   oceanBlueLight = new THREE.AmbientLight(0x04468e, 1);
-  oceanBlueLight = new THREE.PointLight(0x000000, 1, 30);
   oceanBlueLight2 = new THREE.AmbientLight(0xffffff, 0.2);
-  oceanBlueLight.position.set(0,-10,0);
   oceanBlueLight2.position.set(0,-10,0);
-
+  // scene.add(oceanBlueLight);
+  initUnderwaterDynamics();
 }
+
+// function initCaveWall() {
+//   const wallG = new THREE.PlaneGeometry(50, 15);
+//   const wallM = new THREE.MeshStandardMaterial({color: 0x00010f});
+//   const wall = new THREE.Mesh(wallG, wallM);
+//   wall.rotation.y = 90 * degreeToRad;
+//   wall.position.set(0, -25, 4);
+//   scene.add(wall);
+// }
 
 function initBloom() {
   
@@ -251,8 +260,6 @@ function loadModels() {
       }
     });
     hippoMixer = new THREE.AnimationMixer(model);
-    // waterSpotLight.target = model;
-    // mixer.clipAction(gltf.animations[0]).play();
 
     const clips = gltf.animations;
     clips.forEach((clip) => hippoMixer.clipAction(clip).play());
@@ -291,7 +298,17 @@ function loadModels() {
     underwaterMixer.clipAction(gltf.animations[0]).play();
     underwaterMixer.clipAction(gltf.animations[1]).play();
     pearlAction = gltf.animations;
-    // waterSpotLight.target = model;
+    scene.add(model);
+  }, undefined, function (error) { console.error(); });
+
+  modelLoader.load(caveURL.href, function (gltf) {
+    const model = gltf.scene;
+    model.position.set(0, -35.26, 8.7);
+    model.traverse((o) => {
+      if (o.isMesh) {
+        o.castShadow= true;
+      }
+    });
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 }
@@ -317,9 +334,12 @@ function animate() {
 	waterSpotLight2.position.z = Math.sin( timer ) * 2.5;
 
   heartModel.rotation.y += 0.01;
-  
-  if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
-    scene.fog = new THREE.FogExp2( 0x51a3f0, 0.005 );
+if (camera.position.y < -20) {
+  scene.background = new THREE.Color( 0x3c7396);
+  scene.remove(waterBack);
+}
+else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
+    scene.fog = new THREE.FogExp2( 0x51a3f0, 0.001 );
     scene.add(waterBack)
     scene.remove(skyMesh);
     scene.add(oceanBlueLight2);
@@ -331,7 +351,7 @@ function animate() {
     scene.add(skyMesh);
     scene.remove(oceanBlueLight2);
     scene.background = new THREE.Color( 0x00010f);
-  }
+  } 
 
   if (camera.position.y < -2 && !pearlPlayed) {
     for (let i=2; i<pearlAction.length; i++) {
@@ -460,8 +480,6 @@ function returnOceanCam() {
 document.getElementById('backButton').onclick = function() {
  back();
 };
-
-
 
 
 
