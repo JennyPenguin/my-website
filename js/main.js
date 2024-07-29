@@ -5,30 +5,19 @@ import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
 import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
+//import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
+
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 const caveURL = new URL('../models/cave.glb', import.meta.url);
-import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
-
-let skyMesh, waterSpotLight, waterSpotLight2;
-
-// window.addEventListener('mouseup', function() {
-//   console.log(camera.position);
-// })
+const waterTexture = new URL('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg', import.meta.url);
+const cloudURL = new URL('../images/Cloud_Pattern.jpg', import.meta.url);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-let heartModel, heartLight;
-let initHeartPos = [1.287, 2.451, -2.80];
-let pearlAction, oceanBlueLight, oceanBlueLight2;
-let pearlPlayed = false;
-
-
-
-const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
 
 const degreeToRad = Math.PI / 180;
@@ -42,37 +31,33 @@ let hippoMixer, underwaterMixer;
 
 document.body.scrollY = 0;
 let waterBack;
+let heartModel, heartLight;
+let initHeartPos = [1.287, 2.451, -2.80];
+let pearlAction, oceanBlueLight, oceanBlueLight2;
+let pearlPlayed = false;
+let skyMesh, waterSpotLight, waterSpotLight2;
 
 const renderer = new THREE.WebGLRenderer({
-  canvas: document.querySelector('#bg'),
+  canvas: document.getElementById('bg'),
 });
-
 const tl = gsap.timeline();
-
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
-// const fpc = new FirstPersonControls(camera, renderer.domElement);
-// fpc.movementSpeed = 8;
-// fpc.lookSpeed = 0.08;
-
 const modelLoader = new GLTFLoader();
 const textureloader = new THREE.TextureLoader();
+
+
 let startPos = 5.641;
 let endPos = -25;
 
 init();
 
-
 function init() {
-
   initRenderer();
   initCameraPos();
   initSky();
   initWater();
   initLight();
   loadModels();
-  // initCaveWall();
-  // const axisH = new THREE.AxesHelper();
-  // scene.add(axisH);
 }
 
 function initRenderer() {
@@ -93,13 +78,10 @@ function initCameraPos() {
 
 function initSky() {
   const skyGeometry = new THREE.SphereGeometry( 30, 35, 35, 0, Math.PI*2, 0, Math.PI/2);
-  // const skyTexture = textureloader.load('../images/nightSky downloaded from game asset deals.jpg');
   const skyMaterial = new THREE.MeshBasicMaterial({color:0x000000});
   skyMaterial.side = THREE.DoubleSide;
   skyMesh = new THREE.Mesh(skyGeometry, skyMaterial);
   skyMesh.position.set(-5,0,3);
-
-  // skyMesh.castShadow = true;
   scene.add(skyMesh);
 }
 
@@ -113,7 +95,7 @@ function initWater() {
     textureWidth: 1024,
     textureHeight: 1024,
     normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
-    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
+    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg')
   });
 
   waterBack = new Water(waterGeometry, {
@@ -123,50 +105,34 @@ function initWater() {
     textureWidth: 1024,
     textureHeight: 1024,
     normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
-    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_2_M_Normal.jpg')
+    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg')
   });
 
   waterBack.name = "waterBack";
-
-
 
   water.position.y = 0.45
   water.rotation.x = Math.PI * -0.5;
 
   waterBack.position.y = 0.451;
   waterBack.rotation.x = Math.PI * 0.5;
-  // water.position.x = 7.5;
 
   scene.add(water);
 }
 
 function initUnderwaterDynamics() {
-  // code from three.js examples
-  // const filenames = [ 'Water_pattern.png'];
+	const texture = textureloader.load(waterURL );
+	texture.minFilter = THREE.LinearFilter;
+	texture.magFilter = THREE.LinearFilter;
+	texture.colorSpace = THREE.SRGBColorSpace;
 
-				const textures = { none: null };
-
-				// for ( let i = 0; i < filenames.length; i ++ ) {
-
-					// const filename = filenames[ i ];
-
-				const texture = textureloader.load(waterURL );
-				texture.minFilter = THREE.LinearFilter;
-				texture.magFilter = THREE.LinearFilter;
-				texture.colorSpace = THREE.SRGBColorSpace;
-
-				textures[ 'Water_pattern.png' ] = texture;
-
-				// }
-
-				waterSpotLight = new THREE.SpotLight( 0xffffff, 30);
-				waterSpotLight.position.set( -4,0,  -10);
+	waterSpotLight = new THREE.SpotLight( 0xffffff, 30);
+	waterSpotLight.position.set( -4,0,  -10);
         
 				waterSpotLight.angle = Math.PI/4;
 				waterSpotLight.penumbra = 0.5;
 				waterSpotLight.decay = 1;
 				waterSpotLight.distance = 50;
-				waterSpotLight.map = textures[  'Water_pattern.png'];
+				waterSpotLight.map = texture;
 
 				waterSpotLight.castShadow = true;
 				waterSpotLight.shadow.mapSize.width = 1024;
@@ -191,7 +157,7 @@ function initUnderwaterDynamics() {
 				waterSpotLight2.penumbra = 0.5;
 				waterSpotLight2.decay = 1;
 				waterSpotLight2.distance = 70;
-				waterSpotLight2.map = textures[  'Water_pattern.png'];
+				waterSpotLight2.map = texture;
 
 				waterSpotLight2.castShadow = true;
 				waterSpotLight2.shadow.mapSize.width = 1024;
@@ -334,7 +300,7 @@ function animate() {
 	waterSpotLight2.position.z = Math.sin( timer ) * 2.5;
 
   heartModel.rotation.y += 0.01;
-if (camera.position.y < -20) {
+if (camera.position.y < -20.874) {
   scene.background = new THREE.Color( 0x3c7396);
   scene.remove(waterBack);
 }

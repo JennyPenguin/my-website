@@ -150,7 +150,6 @@ canvas {
 
 #cameraPos {
   position: fixed;
-  display: none;
 }
 
 .empty {
