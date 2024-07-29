@@ -1,8 +1,5 @@
 import * as THREE from 'three';
 import gsap from 'gsap';
-import { Mesh } from 'three';
-import { MeshStandardMaterial } from 'three';
-import { Color } from 'three';
 import { GLTFLoader, OrbitControls, ThreeMFLoader } from 'three/examples/jsm/Addons.js';
 import { RenderPass } from 'three/examples/jsm/Addons.js';
 import { EffectComposer } from 'three/examples/jsm/Addons.js';
