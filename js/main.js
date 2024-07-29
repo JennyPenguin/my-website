@@ -7,7 +7,7 @@ import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
-const mountURL = new URL('../models/mount.glb', import.meta.url);
+const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
 
@@ -140,22 +140,22 @@ function initWater() {
 
 function initUnderwaterDynamics() {
   // code from three.js examples
-  const filenames = [ 'Water_pattern.png'];
+  // const filenames = [ 'Water_pattern.png'];
 
 				const textures = { none: null };
 
-				for ( let i = 0; i < filenames.length; i ++ ) {
+				// for ( let i = 0; i < filenames.length; i ++ ) {
 
-					const filename = filenames[ i ];
+					// const filename = filenames[ i ];
 
-					const texture = textureloader.load(new URL('../images/' + filename, import.meta.url)  );
-					texture.minFilter = THREE.LinearFilter;
-					texture.magFilter = THREE.LinearFilter;
-					texture.colorSpace = THREE.SRGBColorSpace;
+				const texture = textureloader.load(waterURL );
+				texture.minFilter = THREE.LinearFilter;
+				texture.magFilter = THREE.LinearFilter;
+				texture.colorSpace = THREE.SRGBColorSpace;
 
-					textures[ filename ] = texture;
+				textures[ 'Water_pattern.png' ] = texture;
 
-				}
+				// }
 
 				waterSpotLight = new THREE.SpotLight( 0xffffff, 30);
 				waterSpotLight.position.set( -4,0,  -10);
