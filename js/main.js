@@ -13,9 +13,9 @@ import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonContro
 
 let skyMesh, waterSpotLight, waterSpotLight2;
 
-window.addEventListener('mouseup', function() {
-  console.log(camera.position);
-})
+// window.addEventListener('mouseup', function() {
+//   console.log(camera.position);
+// })
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -46,6 +46,7 @@ const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
 });
 
+const tl = gsap.timeline();
 
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
 // const fpc = new FirstPersonControls(camera, renderer.domElement);
@@ -407,8 +408,7 @@ window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener( 'click', render );
 
 function zoomTo(object) {
-  const tl = gsap.timeline();
-  const pos = object.position;
+
   tl.to(camera.position, {
     x: 4.5,
     y: -9,
@@ -418,12 +418,51 @@ function zoomTo(object) {
   })
 }
 
+function noAction() {}
+
+
 function show() {
-  document.getElementById("vr").classList.remove("noView");
-  document.getElementById("vr").classList.add("fadeIn");
-  document.getElementById('backButton').classList.remove("noView");
-  document.getElementById('backButton').classList.add("fadeIn");
+  document.body.onscroll = noAction;
+  // document.getElementsByClassName('canvas')[0].classList.add('noScroll');
+  const vr = document.getElementById("vr");
+  const backB = document.getElementById('backButton');
+  vr.classList.remove("noView");
+  vr.classList.add("fadeIn");
+  vr.classList.remove("fadeOut");
+  backB.classList.remove("noView");
+  backB.classList.add("fadeIn");
+  backB.classList.remove("fadeOut");
 }
+
+function back() {
+  document.body.onscroll = moveCamera;
+  // document.getElementsByClassName('canvas')[0].classList.remove('noScroll');
+  const page = document.getElementById("vr");
+  const backB = document.getElementById('backButton');
+  page.classList.add("noView");
+  page.classList.add("fadeOut");
+  page.classList.remove("fadeIn");
+  backB.classList.add("noView");
+  backB.classList.remove("fadeIn");
+  backB.classList.add("fadeOut");
+  returnOceanCam();
+}
+
+function returnOceanCam() {
+  tl.to(camera.position, {
+    x: 17.273,
+    y: -9,
+    z:  5.114,
+    duration: 2
+  })
+}
+
+document.getElementById('backButton').onclick = function() {
+ back();
+};
+
+
+
 
 
 

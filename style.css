@@ -8,7 +8,11 @@
   src: url('fonts/SpaceGrotesk-VariableFont_wght.ttf');
 }
 
-main {
+.noScroll {
+  overflow: hidden;
+}
+
+#main {
   position: absolute;
 }
 
@@ -45,12 +49,18 @@ canvas {
 }
 
 #backButton {
+  font-family: 'Lemon';
   z-index: 10;
   position: fixed;
-  left: 54vw;
-  top: 4vh;
+  right: 3vw;
+  bottom: 3vh;
   background-color: #f998bb;
-  font-size: large;
+  font-size: xx-large;
+  padding: 10px 15px;
+  border-radius: 15px;
+  border: noneq
+  ;
+  outline: rgb(255, 229, 245, 0.5) solid 5px
 }
 
 .noView {
@@ -59,17 +69,22 @@ canvas {
 
 .overlay {
   position: fixed;
-  overflow-y: scroll;
+  width: 100vw;
+  height: 100vh;
+  z-index: 5;
+  line-height: 2;
+}
+
+.leftOverlay {
+  outline: rgb(255, 229, 245, 0.8) solid 10px;
+  background-color: #fff6fd;
   width: 55vw;
   height: 95vh;
-  background-color: #fff6fd;
-  outline: rgb(255, 229, 245, 0.8) solid 10px;
-  z-index: 5;
   margin: 2.5vh 2vw;
   border-radius: 15px;
   padding-left: 15px;
   padding-right: 15px;
-  line-height: 2;
+  overflow-y: scroll;
 }
 
 .project {
@@ -127,6 +142,10 @@ canvas {
 
 .fadeIn {
   animation: appear 0.5s linear;
+}
+
+.fadeOut {
+  animation: disappear 0.5s linear;
 }
 
 #cameraPos {
@@ -224,6 +243,15 @@ canvas {
   }
   to {
     opacity: 1;
+  }
+}
+
+@keyframes disappear {
+  from  {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
   }
 }
 
