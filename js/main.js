@@ -13,7 +13,7 @@ const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 const caveURL = new URL('../models/cave.glb', import.meta.url);
 const waterTexture = new URL('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg', import.meta.url);
-const cloudURL = new URL('../images/Cloud_Pattern.jpg', import.meta.url);
+const cloudURL = new URL('../images/Cloud_Pattern.png', import.meta.url);
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -36,6 +36,7 @@ let initHeartPos = [1.287, 2.451, -2.80];
 let pearlAction, oceanBlueLight, oceanBlueLight2;
 let pearlPlayed = false;
 let skyMesh, waterSpotLight, waterSpotLight2;
+let clouds = [];
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('bg'),
@@ -57,6 +58,7 @@ function init() {
   initSky();
   initWater();
   initLight();
+  initClouds();
   loadModels();
 }
 
@@ -183,25 +185,36 @@ function initLight() {
 
   const sky = new THREE.AmbientLight(0xFFFFFF, 0.05);
   scene.add(sky);
-  // for some reason, code stops working if
+  // for some reason, code stops working if removed oceanBlueLight
   oceanBlueLight = new THREE.AmbientLight(0x04468e, 1);
   oceanBlueLight2 = new THREE.AmbientLight(0xffffff, 0.2);
   oceanBlueLight2.position.set(0,-10,0);
   // scene.add(oceanBlueLight);
   initUnderwaterDynamics();
+
+
 }
 
-// function initCaveWall() {
-//   const wallG = new THREE.PlaneGeometry(50, 15);
-//   const wallM = new THREE.MeshStandardMaterial({color: 0x00010f});
-//   const wall = new THREE.Mesh(wallG, wallM);
-//   wall.rotation.y = 90 * degreeToRad;
-//   wall.position.set(0, -25, 4);
-//   scene.add(wall);
-// }
+function initClouds() {
+  const cloudTexture = textureloader.load(cloudURL);
+  const cloudGeo = new THREE.PlaneGeometry(10,10);
+  const cloudMat = new THREE.MeshLambertMaterial({
+    color: 0xFFFFFFF,
+    map:cloudTexture,
+    blending: THREE.NormalBlending,
+    
+    transparent:true
+  });
 
-function initBloom() {
-  
+  for (let c=0; c<40; c++) {
+    const cloud = new THREE.Mesh(cloudGeo, cloudMat);
+    cloud.material.opacity = 0.4;
+    cloud.position.set(-20 + Math.random()*30 ,-30 - Math.random() * 15, -60 + Math.random() * 90);
+    // cloud.position.set(-, -35, 5);
+    cloud.rotation.y = 90 * degreeToRad;
+    clouds.push(cloud);
+    scene.add(cloud);
+  }
 }
 
 const bloomRenderScene = new RenderPass(scene, camera);
@@ -267,6 +280,10 @@ function loadModels() {
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 
+  const islandsDirectLight = new THREE.DirectionalLight(0xffffff, 0.2);
+  islandsDirectLight.position.set(8, -30, 5);
+  
+
   modelLoader.load(caveURL.href, function (gltf) {
     const model = gltf.scene;
     model.position.set(0, -35.26, 8.7);
@@ -275,8 +292,15 @@ function loadModels() {
         o.castShadow= true;
       }
     });
+    
     scene.add(model);
   }, undefined, function (error) { console.error(); });
+
+  islandsDirectLight.target.position.set(0, -37, 5);
+    islandsDirectLight.target.updateMatrixWorld();
+  const islandHelper = new THREE.DirectionalLightHelper(islandsDirectLight, 10);
+  scene.add(islandsDirectLight);
+  scene.add(islandHelper);
 }
 
 function animate() {
@@ -293,6 +317,10 @@ function animate() {
 
   const timer = performance.now() / 3000;
 
+  clouds.forEach(p => {
+    p.rotation.z -= 0.001;
+  })
+
 	waterSpotLight.position.x = Math.cos( timer ) * 2.5;
 	waterSpotLight.position.z = Math.sin( timer ) * 2.5;
 
@@ -301,7 +329,7 @@ function animate() {
 
   heartModel.rotation.y += 0.01;
 if (camera.position.y < -20.874) {
-  scene.background = new THREE.Color( 0x3c7396);
+  scene.background = new THREE.Color( 0x0a4148);
   scene.remove(waterBack);
 }
 else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
