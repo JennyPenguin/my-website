@@ -83,10 +83,25 @@ canvas {
 .carousel {
   width: 75%;
   margin: auto;
+  position: relative;
 }
 
-.carousel.left, .carousel.right {
+.carousel button {
+  border: none;
   position: absolute;
+  color: #000000;
+  top: 0;
+  bottom: 0;
+  margin: auto 0;
+  font-size: xx-large;
+}
+
+.left {
+  left: -5%;
+}
+
+.right {
+  right: -5%
 }
 
 .card img {
