@@ -44,6 +44,66 @@ canvas {
   color: transparent;
 }
 
+.noView {
+  display: none;
+}
+
+.overlay {
+  position: fixed;
+  overflow-y: scroll;
+  width: 55vw;
+  height: 95vh;
+  background-color: #fff6fd;
+  outline: rgb(255, 229, 245, 0.8) solid 10px;
+  z-index: 5;
+  margin: 2.5vh 2vw;
+  border-radius: 15px;
+  padding-left: 15px;
+  padding-right: 15px;
+  line-height: 2;
+}
+
+.project {
+  background-color: #ffffff;
+  padding: 0px 12px;
+  border-radius: 15px;
+}
+
+
+.project h3 {
+  text-decoration: underline;
+  padding: 0;
+}
+
+.showcase h3 {
+  margin-left: 12.5%;
+  text-decoration: none;
+}
+
+.carousel {
+  width: 75%;
+  margin: auto;
+}
+
+.carousel.left, .carousel.right {
+  position: absolute;
+}
+
+.card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.overlay h1 {
+  padding: 10px 20px;
+  color: #df00a3;
+}
+
+.fadeIn {
+  animation: appear 0.5s linear;
+}
+
 #cameraPos {
   position: fixed;
   display: none;
@@ -109,6 +169,8 @@ canvas {
 }
 
 
+
+
 /* Animations */
 
 @keyframes fadeGlow {
@@ -134,11 +196,9 @@ canvas {
 @keyframes appear {
   from  {
     opacity: 0;
-    scale: 0.75;
   }
   to {
     opacity: 1;
-    scale: 1;
   }
 }
 

@@ -12,7 +12,13 @@ const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const mountURL = new URL('../models/mount.glb', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
+import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
+
 let skyMesh, waterSpotLight, waterSpotLight2;
+
+window.addEventListener('mouseup', function() {
+  console.log(camera.position);
+})
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -21,6 +27,8 @@ let heartModel, heartLight;
 let initHeartPos = [1.287, 2.451, -2.80];
 let pearlAction, oceanBlueLight, oceanBlueLight2;
 let pearlPlayed = false;
+
+
 
 const waterTexture = new URL('../images/waternormals.jpg', import.meta.url);
 const cameraGUI = document.getElementById('cameraPos');
@@ -43,6 +51,9 @@ const renderer = new THREE.WebGLRenderer({
 
 
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
+// const fpc = new FirstPersonControls(camera, renderer.domElement);
+// fpc.movementSpeed = 8;
+// fpc.lookSpeed = 0.08;
 
 const modelLoader = new GLTFLoader();
 const textureloader = new THREE.TextureLoader();
@@ -288,7 +299,9 @@ function loadModels() {
 }
 
 function animate() {
+
   let time = clock.getDelta();
+  // fpc.update(time);
   if (hippoMixer) {
     hippoMixer.update(time);
   }
@@ -400,11 +413,17 @@ function zoomTo(object) {
   const tl = gsap.timeline();
   const pos = object.position;
   tl.to(camera.position, {
-    x: pos.x,
-    y: pos.y-camera.height,
-    z: pos.z,
-    duration: 2
+    x: 4.5,
+    y: -9,
+    z: 8,
+    duration: 2,
+    onComplete: show
   })
+}
+
+function show() {
+  document.getElementById("vr").classList.remove("noView");
+  document.getElementById("vr").classList.add("fadeIn");
 }
 
 
