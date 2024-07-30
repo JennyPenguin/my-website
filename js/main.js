@@ -14,6 +14,12 @@ const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 const caveURL = new URL('../models/cave.glb', import.meta.url);
 const waterTexture = new URL('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg', import.meta.url);
 const cloudURL = new URL('../images/Cloud_Pattern.png', import.meta.url);
+const cloudURL2 = new URL('../images/Cloud_Pattern2.png', import.meta.url);
+const cloudURL3 = new URL('../images/Cloud_Pattern3.png', import.meta.url);
+const skyURL= new URL('../images/SkyTexture.png', import.meta.url);
+
+// 7 is web, 6 is others, 4 is pong, 3 is vr, 2 is cmu, 1 is unity
+const mapBubblePos = {'7': [3.8,-12,-1.5], '6':[1,-7.8,-2.6], '4': [-2.2, -5.5, 0], '3':[4.5, -9, 8], '2':[-2.2,-5.8,5.5], '1':[4,-10,3.5]}
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
@@ -29,14 +35,7 @@ const clock = new THREE.Clock();
 
 let hippoMixer, underwaterMixer;
 
-document.body.scrollY = 0;
-let waterBack;
-let heartModel, heartLight;
-let initHeartPos = [1.287, 2.451, -2.80];
-let pearlAction, oceanBlueLight, oceanBlueLight2;
-let pearlPlayed = false;
-let skyMesh, waterSpotLight, waterSpotLight2;
-let clouds = [];
+
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('bg'),
@@ -45,6 +44,16 @@ const tl = gsap.timeline();
 const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
 const modelLoader = new GLTFLoader();
 const textureloader = new THREE.TextureLoader();
+
+document.body.scrollY = 0;
+let waterBack;
+let heartModel, heartLight;
+let initHeartPos = [1.287, 2.451, -2.80];
+let pearlAction, oceanBlueLight, oceanBlueLight2;
+let pearlPlayed = false;
+let skyMesh, waterSpotLight, waterSpotLight2;
+let clouds = [];
+const gradientSkyTexture = textureloader.load(skyURL);
 
 
 let startPos = 5.641;
@@ -133,7 +142,7 @@ function initUnderwaterDynamics() {
 				waterSpotLight.angle = Math.PI/4;
 				waterSpotLight.penumbra = 0.5;
 				waterSpotLight.decay = 1;
-				waterSpotLight.distance = 50;
+				waterSpotLight.distance = 60;
 				waterSpotLight.map = texture;
 
 				waterSpotLight.castShadow = true;
@@ -196,20 +205,29 @@ function initLight() {
 }
 
 function initClouds() {
-  const cloudTexture = textureloader.load(cloudURL);
-  const cloudGeo = new THREE.PlaneGeometry(10,10);
-  const cloudMat = new THREE.MeshLambertMaterial({
+  const cloudTextures = [textureloader.load(cloudURL), textureloader.load(cloudURL2), textureloader.load(cloudURL3)];
+  const cloudGeo = new THREE.PlaneGeometry(18,18);
+  const cloudMats = [new THREE.MeshLambertMaterial({
     color: 0xFFFFFFF,
-    map:cloudTexture,
+    map: cloudTextures[0],
     blending: THREE.NormalBlending,
-    
     transparent:true
-  });
+  }), new THREE.MeshLambertMaterial({
+    color: 0xFFFFFFF,
+    map: cloudTextures[1],
+    blending: THREE.NormalBlending,
+    transparent:true
+  }), new THREE.MeshLambertMaterial({
+    color: 0xFFFFFFF,
+    map: cloudTextures[2],
+    blending: THREE.NormalBlending,
+    transparent:true
+  })]
 
-  for (let c=0; c<40; c++) {
-    const cloud = new THREE.Mesh(cloudGeo, cloudMat);
+  for (let c=0; c<25; c++) {
+    const cloud = new THREE.Mesh(cloudGeo, cloudMats[c % 3]);
     cloud.material.opacity = 0.4;
-    cloud.position.set(-20 + Math.random()*30 ,-30 - Math.random() * 15, -60 + Math.random() * 90);
+    cloud.position.set(-20 + Math.random()*20 ,-24 - Math.random() * 28, -30 + Math.random() * 60);
     // cloud.position.set(-, -35, 5);
     cloud.rotation.y = 90 * degreeToRad;
     clouds.push(cloud);
@@ -280,8 +298,8 @@ function loadModels() {
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 
-  const islandsDirectLight = new THREE.DirectionalLight(0xffffff, 0.2);
-  islandsDirectLight.position.set(8, -30, 5);
+  // const islandsDirectLight = new THREE.DirectionalLight(0xffffff, 0.0);
+  // islandsDirectLight.position.set(8, -30, 5);
   
 
   modelLoader.load(caveURL.href, function (gltf) {
@@ -296,11 +314,11 @@ function loadModels() {
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 
-  islandsDirectLight.target.position.set(0, -37, 5);
-    islandsDirectLight.target.updateMatrixWorld();
-  const islandHelper = new THREE.DirectionalLightHelper(islandsDirectLight, 10);
-  scene.add(islandsDirectLight);
-  scene.add(islandHelper);
+  // islandsDirectLight.target.position.set(0, -37, 5);
+  //   islandsDirectLight.target.updateMatrixWorld();
+  // const islandHelper = new THREE.DirectionalLightHelper(islandsDirectLight, 10);
+  // scene.add(islandsDirectLight);
+  // scene.add(islandHelper);
 }
 
 function animate() {
@@ -329,7 +347,7 @@ function animate() {
 
   heartModel.rotation.y += 0.01;
 if (camera.position.y < -20.874) {
-  scene.background = new THREE.Color( 0x0a4148);
+  scene.background = new THREE.Color( 0x1d519c);
   scene.remove(waterBack);
 }
 else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
@@ -397,7 +415,6 @@ function onPointerMove( event ) {
 	pointer.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
 }
 
-
 function render() {
 
 	// update the picking ray with the camera and pointer position
@@ -407,9 +424,9 @@ function render() {
 	const intersects = raycaster.intersectObjects( scene.children );
 
 	for ( let i = 0; i < intersects.length; i ++ ) {
-
-		if (intersects[ i ].object.name.substring(0, 6) == "bubble") {
-      zoomTo(intersects[ i ].object);
+    const bubbleName = intersects[ i ].object.name;
+		if (bubbleName.substring(0, 6) == "bubble") {
+      zoomTo(mapBubblePos[bubbleName.substr(-1)]);
     }
 
 	}
@@ -421,12 +438,12 @@ function render() {
 window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener( 'click', render );
 
-function zoomTo(object) {
+function zoomTo(pos) {
 
   tl.to(camera.position, {
-    x: 4.5,
-    y: -9,
-    z: 8,
+    x: pos[0],
+    y: pos[1],
+    z: pos[2],
     duration: 2,
     onComplete: show
   })
