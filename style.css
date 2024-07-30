@@ -16,6 +16,24 @@
   position: absolute;
 }
 
+#loadingScreen {
+  background-color: pink;
+  font-size: x-large;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#progress-bar {
+  width: 50%;
+  height: 4%;
+  outline: none;
+}
+
+progress::-webkit-progress-value { background: #de5696; }
+
 body {
   background-color: #000000;
   font-family: 'SpaceGrotesk';
@@ -24,6 +42,13 @@ body {
   padding: 0;
   /* overflow: hidden; */
   position: relative;
+}
+
+.updateWarning {
+  background-color: #d0ebf0;
+  color: #3f767f;
+  width: 90%;
+  margin: auto;
 }
 
 button {

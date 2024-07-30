@@ -12,7 +12,7 @@ const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
 const underwaterURL = new URL('../models/underwater.glb', import.meta.url);
 const caveURL = new URL('../models/cave.glb', import.meta.url);
-const waterTexture = new URL('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg', import.meta.url);
+const waterNormalURL = new URL('../images/Water_1_M_Normal.jpg', import.meta.url);
 const cloudURL = new URL('../images/Cloud_Pattern.png', import.meta.url);
 const cloudURL2 = new URL('../images/Cloud_Pattern2.png', import.meta.url);
 const cloudURL3 = new URL('../images/Cloud_Pattern3.png', import.meta.url);
@@ -20,11 +20,29 @@ const skyURL= new URL('../images/SkyTexture.png', import.meta.url);
 
 // 7 is web, 6 is others, 4 is pong, 3 is vr, 2 is cmu, 1 is unity
 const mapBubblePos = {'7': [3.8,-12,-1.5], '6':[1,-7.8,-2.6], '4': [-2.2, -5.5, 0], '3':[4.5, -9, 8], '2':[-2.2,-5.8,5.5], '1':[4,-10,3.5]}
+let pageChoice = 1; 
 
+const renderer = new THREE.WebGLRenderer({
+  canvas: document.getElementById('bg'),
+});
+const tl = gsap.timeline();
+const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();
 
-const cameraGUI = document.getElementById('cameraPos');
+const loadingManager = new THREE.LoadingManager();
+const textureloader = new THREE.TextureLoader(loadingManager);
+const modelLoader = new GLTFLoader(loadingManager);
+const progressBar = document.getElementById('progress-bar');
+const loadingScreen = document.getElementById('loadingScreen');
+
+loadingManager.onProgress = function(url, loaded, total) {
+  progressBar.value = (loaded / total) + 100;
+}
+
+loadingManager.onLoad = function() {
+  loadingScreen.style.display = "none";
+}
 
 const degreeToRad = Math.PI / 180;
 
@@ -37,13 +55,7 @@ let hippoMixer, underwaterMixer;
 
 
 
-const renderer = new THREE.WebGLRenderer({
-  canvas: document.getElementById('bg'),
-});
-const tl = gsap.timeline();
-const camera = new THREE.PerspectiveCamera(50.00, window.innerWidth / window.innerHeight, 0.1, 100);
-const modelLoader = new GLTFLoader();
-const textureloader = new THREE.TextureLoader();
+
 
 document.body.scrollY = 0;
 let waterBack;
@@ -105,8 +117,8 @@ function initWater() {
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
     textureHeight: 1024,
-    normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
-    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg')
+    normalMap0: textureloader.load(waterNormalURL),
+    normalMap1: textureloader.load(waterNormalURL)
   });
 
   waterBack = new Water(waterGeometry, {
@@ -115,8 +127,8 @@ function initWater() {
     flowDirection: new THREE.Vector2(1, 1),
     textureWidth: 1024,
     textureHeight: 1024,
-    normalMap0: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg'),
-    normalMap1: textureloader.load('https://threejs.org/examples/textures/water/Water_1_M_Normal.jpg')
+    normalMap0: textureloader.load(waterNormalURL),
+    normalMap1: textureloader.load(waterNormalURL)
   });
 
   waterBack.name = "waterBack";
@@ -201,7 +213,13 @@ function initLight() {
   // scene.add(oceanBlueLight);
   initUnderwaterDynamics();
 
+  const pointPink = new THREE.PointLight(0xfcb9c4, 1, 20, 1);
+  pointPink.position.set(0, -35, 0);
+  scene.add(pointPink);
 
+  const pointDarkPink = new THREE.PointLight(0xdf00a3, 1, 30, 1);
+  pointDarkPink.position.set(3, -36, 8);
+  scene.add(pointDarkPink);
 }
 
 function initClouds() {
@@ -224,7 +242,7 @@ function initClouds() {
     transparent:true
   })]
 
-  for (let c=0; c<25; c++) {
+  for (let c=0; c<30; c++) {
     const cloud = new THREE.Mesh(cloudGeo, cloudMats[c % 3]);
     cloud.material.opacity = 0.4;
     cloud.position.set(-20 + Math.random()*20 ,-24 - Math.random() * 28, -30 + Math.random() * 60);
@@ -375,7 +393,6 @@ else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
   window.addEventListener("resize", onWindowResize, false);
   renderComposer.render();
   // renderer.render(scene, camera);
-  cameraGUI.innerHTML = `position: ${camera.position.x}, ${camera.position.y}, ${camera.position.z}` + ` rotation: ${camera.rotation.x}, ${camera.rotation.y}, ${camera.rotation.z}` + ` focal: ${camera.focus}` + ` near: ${camera.near} far" ${camera.far}`;
   requestAnimationFrame(animate);
 }
 
