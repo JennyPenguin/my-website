@@ -20,7 +20,8 @@ const skyURL= new URL('../images/SkyTexture.png', import.meta.url);
 
 // 7 is web, 6 is others, 4 is pong, 3 is vr, 2 is cmu, 1 is unity
 const mapBubblePos = {'7': [3.8,-12,-1.5], '6':[1,-7.8,-2.6], '4': [-2.2, -5.5, 0], '3':[4.5, -9, 8], '2':[-2.2,-5.8,5.5], '1':[4,-10,3.5]}
-let pageChoice = 1; 
+const mapBubbleName = {'7': "web", '6':"others", '4': "pong", '3':"vr", '2':"education", '1':"unity"}
+let pageChoice = "-1"; 
 
 const renderer = new THREE.WebGLRenderer({
   canvas: document.getElementById('bg'),
@@ -316,10 +317,6 @@ function loadModels() {
     scene.add(model);
   }, undefined, function (error) { console.error(); });
 
-  // const islandsDirectLight = new THREE.DirectionalLight(0xffffff, 0.0);
-  // islandsDirectLight.position.set(8, -30, 5);
-  
-
   modelLoader.load(caveURL.href, function (gltf) {
     const model = gltf.scene;
     model.position.set(0, -35.26, 8.7);
@@ -331,12 +328,6 @@ function loadModels() {
     
     scene.add(model);
   }, undefined, function (error) { console.error(); });
-
-  // islandsDirectLight.target.position.set(0, -37, 5);
-  //   islandsDirectLight.target.updateMatrixWorld();
-  // const islandHelper = new THREE.DirectionalLightHelper(islandsDirectLight, 10);
-  // scene.add(islandsDirectLight);
-  // scene.add(islandHelper);
 }
 
 function animate() {
@@ -417,7 +408,7 @@ function moveCamera() {
   camera.position.y = startPos + t * 0.01;
   heartModel.position.y = initHeartPos[1] + t * 0.01;
   heartModel.position.x = initHeartPos[0] - t * 0.01;
-  heartModel.position.z = initHeartPos[2] - t * 0.01;
+  heartModel.position.z = initHeartPos[2] - t * 0.01;queueMicrotask
   heartLight.position.set(heartModel.position.x, heartModel.position.y, heartModel.position.z);
 }
 
@@ -442,8 +433,9 @@ function render() {
 
 	for ( let i = 0; i < intersects.length; i ++ ) {
     const bubbleName = intersects[ i ].object.name;
-		if (bubbleName.substring(0, 6) == "bubble") {
-      zoomTo(mapBubblePos[bubbleName.substr(-1)]);
+		if (bubbleName.substring(0, 6) == "bubble" && pageChoice == "-1") {
+      pageChoice = bubbleName.substr(-1)
+      zoomTo(mapBubblePos[pageChoice]);
     }
 
 	}
@@ -471,8 +463,7 @@ function noAction() {}
 
 function show() {
   document.body.onscroll = noAction;
-  // document.getElementsByClassName('canvas')[0].classList.add('noScroll');
-  const vr = document.getElementById("vr");
+  const vr = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
   vr.classList.remove("noView");
   vr.classList.add("fadeIn");
@@ -485,7 +476,7 @@ function show() {
 function back() {
   document.body.onscroll = moveCamera;
   // document.getElementsByClassName('canvas')[0].classList.remove('noScroll');
-  const page = document.getElementById("vr");
+  const page = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
   page.classList.add("noView");
   page.classList.add("fadeOut");
@@ -493,6 +484,7 @@ function back() {
   backB.classList.add("noView");
   backB.classList.remove("fadeIn");
   backB.classList.add("fadeOut");
+  pageChoice = "-1";
   returnOceanCam();
 }
 

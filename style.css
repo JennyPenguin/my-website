@@ -47,7 +47,8 @@ body {
 .updateWarning {
   background-color: #d0ebf0;
   color: #3f767f;
-  width: 90%;
+  width: 100%;
+  border-radius: 15px;
   margin: auto;
 }
 
