@@ -365,7 +365,7 @@ function animate() {
 
   heartModel.rotation.y += 0.01;
 if (camera.position.y < -20.874) {
-  scene.background = new THREE.Color( 0x1d519c);
+  scene.background = new THREE.Color( 0x2058ab);
   scene.remove(waterBack);
 }
 else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
