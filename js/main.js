@@ -37,6 +37,8 @@ const modelLoader = new GLTFLoader(loadingManager);
 const progressBar = document.getElementById('progress-bar');
 const loadingScreen = document.getElementById('loadingScreen');
 
+let prevScroll;
+
 loadingManager.onProgress = function(url, loaded, total) {
   progressBar.value = (loaded / total) + 100;
 }
@@ -155,7 +157,7 @@ function initUnderwaterDynamics() {
 				waterSpotLight.angle = Math.PI/4;
 				waterSpotLight.penumbra = 0.5;
 				waterSpotLight.decay = 1;
-				waterSpotLight.distance = 60;
+				waterSpotLight.distance = 70;
 				waterSpotLight.map = texture;
 
 				waterSpotLight.castShadow = true;
@@ -246,7 +248,7 @@ function initClouds() {
   for (let c=0; c<30; c++) {
     const cloud = new THREE.Mesh(cloudGeo, cloudMats[c % 3]);
     cloud.material.opacity = 0.4;
-    cloud.position.set(-20 + Math.random()*20 ,-24 - Math.random() * 28, -30 + Math.random() * 60);
+    cloud.position.set(-20 + Math.random()*12 ,-24 - Math.random() * 28, -30 + Math.random() * 60);
     // cloud.position.set(-, -35, 5);
     cloud.rotation.y = 90 * degreeToRad;
     clouds.push(cloud);
@@ -465,6 +467,7 @@ function show() {
   document.body.onscroll = noAction;
   const vr = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
+  // document.getElementById("main").classList.add("transparent");
   vr.classList.remove("noView");
   vr.classList.add("fadeIn");
   vr.classList.remove("fadeOut");
@@ -478,6 +481,7 @@ function back() {
   // document.getElementsByClassName('canvas')[0].classList.remove('noScroll');
   const page = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
+  // document.getElementById("main").classList.remove("transparent");
   page.classList.add("noView");
   page.classList.add("fadeOut");
   page.classList.remove("fadeIn");
