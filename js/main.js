@@ -37,7 +37,7 @@ const modelLoader = new GLTFLoader(loadingManager);
 const progressBar = document.getElementById('progress-bar');
 const loadingScreen = document.getElementById('loadingScreen');
 
-let prevScroll;
+
 
 loadingManager.onProgress = function(url, loaded, total) {
   progressBar.value = (loaded / total) + 100;
@@ -467,7 +467,7 @@ function show() {
   document.body.onscroll = noAction;
   const vr = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
-  // document.getElementById("main").classList.add("transparent");
+  document.getElementById("main").classList.add("noScroll");
   vr.classList.remove("noView");
   vr.classList.add("fadeIn");
   vr.classList.remove("fadeOut");
@@ -478,10 +478,10 @@ function show() {
 
 function back() {
   document.body.onscroll = moveCamera;
-  // document.getElementsByClassName('canvas')[0].classList.remove('noScroll');
+  document.getElementById("main").classList.remove("noScroll");
+  vr.classList.remove("noView");
   const page = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
-  // document.getElementById("main").classList.remove("transparent");
   page.classList.add("noView");
   page.classList.add("fadeOut");
   page.classList.remove("fadeIn");
