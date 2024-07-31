@@ -462,15 +462,17 @@ function zoomTo(pos) {
 
 function noAction() {}
 
+let prevScroll;
 
 function show() {
   document.body.onscroll = noAction;
-  const vr = document.getElementById(mapBubbleName[pageChoice]);
-  const backB = document.getElementById('backButton');
+  prevScroll = window.scrollY;
   document.getElementById("main").classList.add("noScroll");
-  vr.classList.remove("noView");
-  vr.classList.add("fadeIn");
-  vr.classList.remove("fadeOut");
+  const page = document.getElementById(mapBubbleName[pageChoice]);
+  const backB = document.getElementById('backButton');
+  page.classList.remove("noView");
+  page.classList.add("fadeIn");
+  page.classList.remove("fadeOut");
   backB.classList.remove("noView");
   backB.classList.add("fadeIn");
   backB.classList.remove("fadeOut");
@@ -479,8 +481,8 @@ function show() {
 function back() {
   document.body.onscroll = moveCamera;
   document.getElementById("main").classList.remove("noScroll");
-  vr.classList.remove("noView");
   const page = document.getElementById(mapBubbleName[pageChoice]);
+  window.scrollTo(0, prevScroll);
   const backB = document.getElementById('backButton');
   page.classList.add("noView");
   page.classList.add("fadeOut");
