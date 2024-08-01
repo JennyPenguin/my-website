@@ -322,18 +322,25 @@ canvas {
 
 .neon {
   color: #ffffff;
-  text-shadow: 0 0 10px #e57bad,
-        0 0 20px #de5696,
-        0 0 40px #de5696,
-        0 0 80px #de5696,
-        0 0 160px #de5696;
-
-  
-  animation: fadeGlow 1s linear, slideIn 1s linear;
+  text-shadow: 0 0 10px #a70297,
+        0 0 20px #a70297,
+        0 0 40px #a70297,
+        0 0 80px #a70297,
+        0 0 160px #a70297;
+  /* animation: fadeGlow 1s linear 1s, slideIn 1s linear; */
   /* make animation happen when viewed instead of load */
   /* animation-timeline: view(); */
   /* make animation happen as soon as it's o% in viewport and finishes when it's 40% through view*/
   /* animation-range: entry 0 cover 40%;  */
+}
+
+.darkNeon {
+  color: #000;
+  text-shadow: 0 0 10px #ffe5f5,
+        0 0 20px #ffe5f5,
+        0 0 40px #ffe5f5,
+        0 0 80px #ffe5f5,
+        0 0 160px #ffe5f5;
 }
 
 

@@ -40,6 +40,7 @@ const loadingScreen = document.getElementById('loadingScreen');
 const times = document.getElementById("timeline").childNodes;
 const dotButtons = document.getElementsByClassName("dotButton");
 const viewBubblesWarning = document.getElementById("viewBubblesText");
+const main = document.getElementById("main");
 
 let prevScroll;
 
@@ -421,7 +422,7 @@ function onWindowResize() {
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
   const scrollPct = window.scrollY / (4800 - window.innerHeight);
-  console.log(`${window.scrollY} ${window.height} `);
+  // console.log(`${window.scrollY} ${window.height} `);
   camera.position.y = startPos + scrollPct * -40;
   heartModel.position.y = initHeartPos[1] + t * 0.01;
   heartModel.position.x = initHeartPos[0] - t * 0.01;
@@ -481,7 +482,7 @@ function noAction() {}
 function show() {
   document.body.onscroll = noAction;
   prevScroll = window.scrollY;
-  document.getElementById("main").classList.add("noScroll");
+  main.classList.add("noScroll");
   const page = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
   page.classList.remove("noView");
@@ -494,7 +495,7 @@ function show() {
 
 function back() {
   document.body.onscroll = moveCamera;
-  document.getElementById("main").classList.remove("noScroll");
+  main.classList.remove("noScroll");
   const page = document.getElementById(mapBubbleName[pageChoice]);
   window.scrollTo(0, prevScroll);
   const backB = document.getElementById('backButton');
@@ -509,6 +510,7 @@ function back() {
 }
 
 function returnOceanCam() {
+  // console.log(window.scrollY);
   tl.to(camera.position, {
     x: 17.273,
     y: -9,
@@ -518,21 +520,31 @@ function returnOceanCam() {
   })
 }
 
-function moveToIntro() {
+let timePosMap = {1: startPos, 3:-9, 5:startPos-40};
+let timeScrollMap = {1: 0, 3:1586.6, 5:3976};
+
+function moveTo(timeChoice) {
   hideTimeLine();
+  main.classList.add("noView");
   tl.to(camera.position, {
-    y: startPos,
+    y: timePosMap[timeChoice],
     duration: 0.5,
-    onComplete: transition
+    onComplete: transition,
+    onCompleteParams:[timeScrollMap[timeChoice]]
   })
-  times[1].classList.add("activeTime");
-  times[3].classList.remove("activeTime");
-  times[5].classList.remove("activeTime");
+  for (let i=1; i<=5; i+=2) {
+    if (i != timeChoice) {
+      times[i].classList.remove("activeTime");
+    } else {
+      times[i].classList.add("activeTime");
+    }
+  }  
 }
 
-function transition() {
+function transition(scrollAmount) {
   showTimeLine();
-  window.scrollTo(0, 0);
+  main.classList.remove("noView");
+  window.scrollTo(0, scrollAmount);
 }
 
 function showTimeLine() {
@@ -550,7 +562,15 @@ document.getElementById('backButton').onclick = function() {
 };
 
 document.getElementById("introButton").onclick = function() {
-  moveToIntro();
+  moveTo(1);
+};
+
+document.getElementById("projectButton").onclick = function() {
+  moveTo(3);
+};
+
+document.getElementById("contactButton").onclick = function() {
+  moveTo(5);
 };
 
 
