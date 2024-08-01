@@ -12,7 +12,7 @@
   <div id="vertLine"></div>
   <div id="timeline">
     <div class="activeTime"><button id="introButton" class="dotButton"> </button><span>Intro</span></div>
-    <div><button class="dotButton"> </button><span>Projects</span></div>
+    <div><button class="dotButton"> </button><span>Projects <span class="noView" id="viewBubblesText">(Click on the bubbles for details)</span></span></div>
     <div><button class="dotButton"> </button><span>Contact</span></div>
   </div>
   <canvas id="bg"></canvas>
@@ -21,10 +21,13 @@
     <progress id="progress-bar" value="0" max="100"></progress>
   </div>
   <div id="main">
-    <div class="grid-container neon large">
-      <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
-      <h2>a.k.a. Hippo Coder</h2>
-      <h3>(Scroll to Continue)</h2>
+    <div class="full">
+      <div class="neon large" id="introScreen">
+        <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
+        <h2>Carnegie Mellon University School of Computer Science student, Currently living in Bay Area</h2>
+        <h2>a.k.a Jenny Hippo</h2>
+        <h3>(Scroll to Continue)</h2>
+      </div>
     </div>
     <div class="full">
       <div id="contactScreen">

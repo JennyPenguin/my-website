@@ -34,10 +34,12 @@ const pointer = new THREE.Vector2();
 const loadingManager = new THREE.LoadingManager();
 const textureloader = new THREE.TextureLoader(loadingManager);
 const modelLoader = new GLTFLoader(loadingManager);
+
 const progressBar = document.getElementById('progress-bar');
 const loadingScreen = document.getElementById('loadingScreen');
 const times = document.getElementById("timeline").childNodes;
 const dotButtons = document.getElementsByClassName("dotButton");
+const viewBubblesWarning = document.getElementById("viewBubblesText");
 
 let prevScroll;
 
@@ -390,6 +392,8 @@ else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
       playOnce(pearlAction[i]);
     }
     pearlPlayed = true;
+    viewBubblesWarning.classList.remove("noView");
+    viewBubblesWarning.classList.add("fadeIn");
   }
 
   window.addEventListener("resize", onWindowResize, false);
