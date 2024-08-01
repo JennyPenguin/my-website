@@ -9,6 +9,12 @@
 </head>
 
 <body>
+  <div id="vertLine"></div>
+  <div id="timeline">
+    <div class="activeTime"><button id="introButton" class="dotButton"> </button><span>Intro</span></div>
+    <div><button class="dotButton"> </button><span>Projects</span></div>
+    <div><button class="dotButton"> </button><span>Contact</span></div>
+  </div>
   <canvas id="bg"></canvas>
   <div class="overlay" id="loadingScreen">
     <label for="progress-bar">Loading...</label>
@@ -19,7 +25,6 @@
       <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
       <h2>a.k.a. Hippo Coder</h2>
       <h3>(Scroll to Continue)</h2>
-        <h3></h3>
     </div>
     <div class="empty">
       <p class="transparent">hi</p>
@@ -34,7 +39,11 @@
       <p class="transparent">h1</p>
     </div>
     <div class="empty">
-      <p class="transparent">h1</p>
+      <div id="contactScreen">
+        <h2>Contact Me!</h2>
+          <p>Github: <a href="https://github.com/JennyPenguin?tab=repositories">https://github.com/JennyPenguin</a></p>
+          <p>LinkedIn: <a href="https://www.linkedin.com/in/jenny-cs/">https://www.linkedin.com/in/jenny-cs/</a></p>
+      </div>
     </div>
   </div>
   <button id="backButton" class="noView">Back</button>
@@ -80,8 +89,11 @@
       <h1>Pong Remake 2D</h1>
       <div class="project">
         <section>
-          <p>During the summer of 2023, I attended a UC Berkeley summer camp where I made this project together with Himani Jha and Carlos Yam-Gomez using Snap!. I then transferred the project to Scratch to publish it (due to large memory size). The original link is: <a href="https://scratch.mit.edu/projects/871226876/">https://scratch.mit.edu/projects/871226876/</a>.</p>
-
+          <p>During the summer of 2023, I attended a UC Berkeley summer camp where I made this project together with Himani Jha and Carlos Yam-Gomez using Snap!. I then transferred the project to Scratch to publish it (due to large memory size). The original link is: <a href="https://scratch.mit.edu/projects/871226876/" target=”_blank”>https://scratch.mit.edu/projects/871226876/</a>.</p>
+          <div>
+            <iframe src="https://scratch.mit.edu/projects/871226876/embed" allowtransparency="true" width="727.5"
+                height="603" frameborder="0" scrolling="no" allowfullscreen></iframe>
+        </div>
         </section>
       </div>
     </div>

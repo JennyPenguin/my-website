@@ -36,8 +36,10 @@ const textureloader = new THREE.TextureLoader(loadingManager);
 const modelLoader = new GLTFLoader(loadingManager);
 const progressBar = document.getElementById('progress-bar');
 const loadingScreen = document.getElementById('loadingScreen');
+const times = document.getElementById("timeline").childNodes;
+const dotButtons = document.getElementsByClassName("dotButton");
 
-
+let prevScroll;
 
 loadingManager.onProgress = function(url, loaded, total) {
   progressBar.value = (loaded / total) + 100;
@@ -360,6 +362,8 @@ function animate() {
 if (camera.position.y < -20.874) {
   scene.background = new THREE.Color( 0x2058ab);
   scene.remove(waterBack);
+  times[5].classList.add("activeTime");
+  times[3].classList.remove("activeTime");
 }
 else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
     scene.fog = new THREE.FogExp2( 0x51a3f0, 0.001 );
@@ -367,6 +371,9 @@ else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
     scene.remove(skyMesh);
     scene.add(oceanBlueLight2);
     scene.background = new THREE.Color( 0x1d519c);
+    times[5].classList.remove("activeTime");
+    times[3].classList.add("activeTime");
+    times[1].classList.remove("activeTime");
   } else if (camera.position.y >= 0.55 && scene.getObjectByName(waterBack.name)) {
     scene.fog.emissiveIntensity = 0;
     scene.fog = new THREE.Fog( 0x000000, 26, 30 );
@@ -374,6 +381,8 @@ else if (camera.position.y < 0.55 && !scene.getObjectByName(waterBack.name)) {
     scene.add(skyMesh);
     scene.remove(oceanBlueLight2);
     scene.background = new THREE.Color( 0x00010f);
+    times[1].classList.add("activeTime");
+    times[3].classList.remove("activeTime");
   } 
 
   if (camera.position.y < -2 && !pearlPlayed) {
@@ -450,7 +459,7 @@ window.addEventListener( 'pointermove', onPointerMove );
 window.addEventListener( 'click', render );
 
 function zoomTo(pos) {
-
+  hideTimeLine();
   tl.to(camera.position, {
     x: pos[0],
     y: pos[1],
@@ -462,7 +471,6 @@ function zoomTo(pos) {
 
 function noAction() {}
 
-let prevScroll;
 
 function show() {
   document.body.onscroll = noAction;
@@ -499,14 +507,44 @@ function returnOceanCam() {
     x: 17.273,
     y: -9,
     z:  5.114,
-    duration: 2
+    duration: 2,
+    onComplete: showTimeLine
   })
+}
+
+function moveToIntro() {
+  hideTimeLine();
+  tl.to(camera.position, {
+    y: startPos,
+    duration: 0.5,
+    onComplete: transition
+  })
+  times[1].classList.add("activeTime");
+  times[3].classList.remove("activeTime");
+  times[5].classList.remove("activeTime");
+}
+
+function transition() {
+  showTimeLine();
+  window.scrollTo(0, 0);
+}
+
+function showTimeLine() {
+  document.getElementById("timeline").style.display = "flex";
+  document.getElementById("vertLine").style.display = "inline";
+}
+
+function hideTimeLine() {
+  document.getElementById("timeline").style.display = "none";
+  document.getElementById("vertLine").style.display = "none";
 }
 
 document.getElementById('backButton').onclick = function() {
  back();
 };
 
-
+document.getElementById("introButton").onclick = function() {
+  moveToIntro();
+};
 
 
