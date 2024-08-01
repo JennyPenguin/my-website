@@ -416,10 +416,12 @@ function onWindowResize() {
 
 function moveCamera() {
   const t = document.body.getBoundingClientRect().top;
-  camera.position.y = startPos + t * 0.01;
+  const scrollPct = window.scrollY / (4800 - window.innerHeight);
+  console.log(`${window.scrollY} ${window.height} `);
+  camera.position.y = startPos + scrollPct * -40;
   heartModel.position.y = initHeartPos[1] + t * 0.01;
   heartModel.position.x = initHeartPos[0] - t * 0.01;
-  heartModel.position.z = initHeartPos[2] - t * 0.01;queueMicrotask
+  heartModel.position.z = initHeartPos[2] - t * 0.01;
   heartLight.position.set(heartModel.position.x, heartModel.position.y, heartModel.position.z);
 }
 
