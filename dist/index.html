@@ -5,57 +5,436 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Home</title>
-  <script type="module" crossorigin src="/my-website/assets/index-D7ZCEEc0.js"></script>
-  <link rel="stylesheet" crossorigin href="/my-website/assets/index-CpNxEeeN.css">
+  <script type="module" crossorigin src="/my-website/assets/index-IwTv6zki.js"></script>
+  <link rel="stylesheet" crossorigin href="/my-website/assets/index-Ckd3CNll.css">
 </head>
 
 <body>
-
-  <button id="cameraPos">Experiences</button>
+  <div id="vertLine"></div>
+  <div id="timeline">
+    <div class="activeTime"><button id="introButton" class="dotButton"> </button><span>Intro</span></div>
+    <div><button class="dotButton" id="projectButton"> </button><span>Projects <span class="noView"
+          id="viewBubblesText">(Click on the bubbles for details)</span></span></div>
+    <div><button class="dotButton" id="contactButton"> </button><span>Contact</span></div>
+  </div>
   <canvas id="bg"></canvas>
-  <main>
-    <div class="grid-container neon large">
-      <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
-      <h2>a.k.a. Hippo Coder</h2>
-      <h3>(Scroll to Continue)</h2>
-      <h3></h3>
-    </div>
-    <div class="empty">
-      <p class="transparent">hi</p>
-    </div>
-    <div class="empty">
-      <p class="transparent">h1</p>
-    </div>
-    
-  </main>
-  <div class="overlay noView" id="vr">
-    <h1>VR Projects</h1>
-    <div class="project">
-      <h2>Memories Collider</h2>
-      <section>
-        <h3>Origin:</h3>
-        <p>This was my very first VR project. Originally, I planned on creating a cherry blossom forest that people can walk in. I love cherry blossom and it's one of my life goals before I die to walk in a real one. After I shared this idea with my mom, she was very excited, and she told me that it would be great to use VR to not fulfill our life dreams but also life regrets. That's when we came up with the idea of a memory collider filled with cherry blossoms, roses, and many more together. The central goal is to fulfill one of my mom's biggest regret - not having a proper wedding - using scenes in VR.</p>
-      </section>
-      <div class="showcase">
-        <h3>Original Sketches</h3>
-        <div class="carousel">
-          <button class="left">&#60;</button>
-          <div class="card active">
-            <img src="/my-website/assets/VR%20Sketch1-Buo2jyuG.jpg" alt="sketch of project 1">
-          </div>
-          <button class="right">&#62;</button>
-        </div>
-        <h3>Scenes in VR</h3>
-        <div class="carousel">
-          <button class="left">&#60;</button>
-          <div class="card active">
-            <img src="" alt="images of scenes in">
-          </div>
-          <button class="right">&#62;</button>
-        </div>
-
+  <div class="overlay" id="loadingScreen">
+    <label for="progress-bar">Loading...</label>
+    <progress id="progress-bar" value="0" max="100"></progress>
+  </div>
+  <div id="main">
+    <div class="full">
+      <div class="neon large" id="introScreen">
+        <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
+        <h2>Carnegie Mellon University School of Computer Science student, Currently living in Silicon Valley.</h2>
+        <h2>a.k.a Jenny Hippo</h2>
+        <h3>(Scroll to Continue)</h2>
       </div>
     </div>
+    <div class="full">
+      <div id="contactScreen">
+        <h2>Contact Me!</h2>
+        <p>Github: <a href="https://github.com/JennyPenguin?tab=repositories">https://github.com/JennyPenguin</a></p>
+        <p>LinkedIn: <a href="https://www.linkedin.com/in/jenny-cs/">https://www.linkedin.com/in/jenny-cs/</a></p>
+        <p>Skills: Java, Python, JavaScript, CSS, C#, Unity, 3D Modeling</p>
+      </div>
+    </div>
+  </div>
+  <button id="backButton" class="noView">Back</button>
+  <div class="overlay noView" id="vr">
+    <div class="leftOverlay">
+      <h1>VR Projects</h1>
+      <div class="project">
+        <div class="demo">
+          <h2>Hippo's Eggeria</h2>
+          <p>I made this game during a Hackathon. Through this game, I learned to work with interaction toolkits to interact with items such as picking them up or placing them in specific spots.</p>
+            <div class="video">
+              <iframe src="https://drive.google.com/file/d/1QVd4yV2WrwITBgQ9ZeAWzeP-kw6Nl51M/preview" width="640" height="480" allow="autoplay"></iframe>
+            </div>
+        </div>
+
+        <div class="demo">
+          <h2>Memories Collider</h2>
+          <section>
+            <h3>Origin:</h3>
+            <p>This was my very first VR project. Originally, I planned on creating a cherry blossom forest that people
+              can walk in. I love cherry blossom and it's one of my life goals before I die to walk in a real one. After
+              I
+              shared this idea with my mom, she was very excited, and she told me that it would be great to use VR to
+              not
+              fulfill our life dreams but also life regrets. That's when we came up with the idea of a memory collider
+              filled with cherry blossoms, roses, and many more together. The central goal is to fulfill one of my mom's
+              biggest regret - not having a proper wedding - using scenes in VR.</p>
+          </section>
+          <div class="showcase">
+            <p>The project is still being developed further. Here is the current progress.</p>
+            <h3>Original Sketches</h3>
+            <div class="carousel">
+              <button class="left" onclick="nextLeft(this)">&#60;</button>
+              <div class="card active">
+                <img src="/my-website/assets/VR%20Sketch1-Buo2jyuG.jpg" alt="sketch of project 1">
+              </div>
+              <div class="card">
+                <img src="/my-website/assets/VR%20Sketch2-CRNUff01.jpg" alt="sketch of project 2">
+              </div>
+              <button class="right" onclick="nextRight(this)">&#62;</button>
+            </div>
+            <h3>Scenes in VR</h3>
+            <div class="video">
+              <iframe src="https://drive.google.com/file/d/1rJ08n0m6xrxtpBzwc9h74WIA7BoYZQSy/preview" width="640"
+                height="480" allow="autoplay"></iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      
+    </div>
+    </div>
+  </div>
+
+  <div class="overlay noView" id="pong">
+    <div class="leftOverlay">
+      <h1>Pong Remake 2D</h1>
+      <div class="project">
+        <section>
+          <p>During the summer of 2023, I attended a UC Berkeley summer camp where I made this project together with
+            Himani Jha and Carlos Yam-Gomez using Snap!. I then transferred the project to Scratch to publish it (due to
+            large memory size). The original link is: <a href="https://scratch.mit.edu/projects/871226876/"
+              target=”_blank”>https://scratch.mit.edu/projects/871226876/</a>.</p>
+          <div>
+            <iframe src="https://scratch.mit.edu/projects/871226876/embed" allowtransparency="true" width="727.5"
+              height="603" frameborder="0" scrolling="no" allowfullscreen></iframe>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="overlay noView" id="unity">
+    <div class="leftOverlay">
+      <h1>Unity Projects</h1>
+      <div class="project">
+        <p>
+          I have been learning Unity for two years. I have made many projects in Unity and also earned a certificate as
+          an Unity user.
+          Below are some video links of me explaining my projects or a quick demo of the game. These are not the
+          only projects I have made, but they are some of my favorite ones.
+        </p>
+        <div class="updateWarning">I don't own all the artworks and music in my project.</div>
+        <div class="demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Illuminate</h2>
+              <h3>Description:</h3>
+              <p>
+                This is a mystery puzzle game that I made during a Hackathon together with Jonathan Jiang, Eva, and
+                Noveled.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player is a little bulb of light trying to escape the dark cave and reach the "illuminated" sky.
+                The player can use the arrows keys or WASD to move around. They can use t to use objects and number keys
+                to select objects in the inventory. There are multiple puzzles that needs to be solved.</p>
+            </div>
+            <p class="emphasis">Click below to open game in another tab!</p>
+            <a href="https://jennyhippo.itch.io/illuminate" target="_blank"><img src="/my-website/assets/Iluminate%20Cover-PbSr9sLA.png"
+                alt="clickable cover image of game"></a>
+          </div>
+        </div>
+        <div class="demo">
+          <h2>VR</h2>
+          <p>I have made several VR projects with Unity and the Oculus headset before. For more info, visit the VR page
+            in projects.</p>
+        </div>
+        <div class="demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Forest Terminator</h2>
+              <h3>Description:</h3>
+              <p>
+                This is the 3D Unity game that I made together with my friend Angela Cui.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player can use the arrows keys or WASD to move around. They can also move the mouse to
+                control the camera view. The player must explore the magical forest and help save the
+                animals from the danger. There is a full storyline in the game, and the player can talk to
+                the animals to get clues to their next step. There is also a boss fight and challenges for
+                the player to overcome.</p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/TqaW6mxbgHs">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class=" demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Solar Eclipse</h2>
+              <h3>Description:</h3>
+              <p>
+                This is platform game with differeent story endings. The player can explore diverse planets with varying
+                enemies.
+              </p>
+              <h3>Gameplay</h3>
+              <p>The player is an astronaut who must rescue some missing solders from space
+                pirates. The
+                player has to go through different planets in order to find the soliders. Each
+                planet is a
+                different level with different challenges. </p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/sFgA0S8fizY">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class="demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Platform Runner</h2>
+              <h3>Description:</h3>
+              <p>
+                This was one of my early 2D games. I added character animations for the first time.
+                It was
+                incredibly fun to draw the vibrating character and add all the settings.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player can use the arrows keys or WASD to move around. They have to jump to the
+                platform
+                before it disappears and randomly move to another location. The player can triple
+                jump. Once
+                the player fall down the screen, they lose.</p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/Yk-V4vu4Sls">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class="demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Asteroids</h2>
+              <h3>Description:</h3>
+              <p>
+                This is my remake of the classic aracde game Asteroids. This is the first time I added
+                particle systems to my games.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player can use the arrows keys or WAD to move around. Asteroids will be randomly
+                spawning. If the player gets hit by a asteroid, they lose a heart. Once they lose all 3
+                hearts, the game ends. The player may press the Space key to shoot at the enemies.</p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/5Y4e-KTTzN0">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class=" demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Clicker Game</h2>
+              <h3>Description:</h3>
+              <p>
+                This was one of my earlest 2D projects. It's a simple and relaxing clicking game.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player can click on the characters in the room while listening to relaxing background
+                musics. When they reach a certain number of clicks, they can exchange clicks for items to
+                decorate different environments.</p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/N_XOSzuueEo">
+              </iframe>
+            </div>
+          </div>
+        </div>
+        <div class=" demo">
+          <div>
+            <div class="leftColumn">
+              <h2>Maze Runner</h2>
+              <h3>Description:</h3>
+              <p>
+                This was my first 2D projects. It's a simple platform game, but it's very hard to beat.
+              </p>
+              <h3>Gameplay:</h3>
+              <p>The player can use the arrow keys or WASD to move around while avoiding the slime obstacles.
+                If the player gets hit, they lose a heart. They have a total of 3 hearts. When the player
+                lose, they can press the "R" key to restart the game. Reach the finish line to win.</p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/vBprIHi0BuI">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="overlay noView" id="web">
+    <div class="leftOverlay">
+      <h1>Javascript Projects</h1>
+      <div class="updateWarning">Please click on the images to open website links in another tab.</div>
+      <div class="project">
+        <div class="demo">
+          <h2>Hippo Word Guesser</h2>
+          <p>This is a word guessing game similar to wordle.</p>
+          <div class="carousel">
+            <button class="left" onclick="nextLeft(this)">&#60;</button>
+            <div class="card active">
+              <a href="https://jennypenguin.github.io/Word-Hippo/" target="_blank"><img src="/my-website/assets/wordhippo-BOD_YiO7.png"
+                  alt="clickable cover image of game"></a>
+            </div>
+            <div class="card">
+              <a href="https://jennypenguin.github.io/Word-Hippo/" target="_blank"><img src="/my-website/assets/wordhippo2-qrbSu96F.png"
+                  alt="clickable cover image of game 2"></a>
+            </div>
+            <button class="right" onclick="nextRight(this)">&#62;</button>
+          </div>
+        </div>
+
+        <div class="demo">
+          <h2>Hippo vs. Octupus</h2>
+          <p>This is a retro fighting game made by me and my friend Ramya who loves octupus. The multiplayer function
+            is still under development.</p>
+          <div class="carousel">
+            <button class="left" onclick="nextLeft(this)">&#60;</button>
+            <div class="card active">
+              <a href="https://jennypenguin.github.io/Retro-Fighter/" target="_blank"><img src="/my-website/assets/hvo-lEiRWQZw.png"
+                  alt="clickable cover image of game"></a>
+            </div>
+            <div class="card">
+              <a href="https://jennypenguin.github.io/Retro-Fighter/" target="_blank"><img src="/my-website/assets/hov2-wzV-GEgP.png"
+                  alt="clickable cover image of game 2"></a>
+            </div>
+            <button class="right" onclick="nextRight(this)">&#62;</button>
+          </div>
+        </div>
+
+        <div class="demo">
+          <h2>Maze Generator</h2>
+          <p>This is a tool to generate mazes with varying sizes.</p>
+          <a href="https://jennypenguin.github.io/Maze-Builder/" target="_blank"><img src="/my-website/assets/mazeGenerator-CdP5ObPq.png"
+              alt="clickable cover image of maze generator"></a>
+        </div>
+
+        <div class="demo">
+          <h2>Personal Website 2</h2>
+          <p>This was the second personal website I made. I changed the UI setups and attempted to work more with css.
+          </p>
+          <a href="https://jennypenguin.github.io/portfolio/" target="_blank"><img src="/my-website/assets/website2-BCSOTAnc.png"
+              alt="clickable cover image of second website"></a>
+        </div>
+
+        <div class="demo">
+          <h2>Personal Website 1</h2>
+          <p>This was the first version of my website as well as the first ever web project I made.</p>
+          <a href="https://jennypenguin.github.io/My-Profile/" target="_blank"><img src="/my-website/assets/website1-Bkgnq2v0.png"
+              alt="clickable cover image of first website"></a>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="overlay noView" id="education">
+    <div class="leftOverlay">
+      <h1>Education</h1>
+      <p>I'm proud to be a freshman at Carnegie Mellon University School of Computer Science for the Class of 2028. CMU
+        has always been my dream university. I am looking forward to studying CS and possibly majoring in AI as well. I
+        am also interested in exploring more about Human-Computer Interaction (HCI), Robotics, and Computer Vision at
+        CMU.</p>
+        <p>Visit my <a href="https://www.linkedin.com/in/jenny-cs/" target="_blank">LinkedIn</a> to see more of my previous CS education journey!</p>
+      <div class="updateWarning">More progress on my university projects and classes will be posted here.</div>
+    </div>
+  </div>
+
+  <div class="overlay noView" id="others">
+    <div class="leftOverlay">
+      <h1>Java Projects</h1>
+      <div>
+        <p>
+          I have been learning Java for 2 years. In my Data Structures class in 11th grade, I recreated many board
+          and card games online using Java. Most of my Java games so far were done in collaboration with my
+          friends.
+        </p>
+        <div class="project">
+          <div>
+            <div class="leftColumn">
+              <h2>Kingdom Builder</h2>
+              <h3>Description:</h3>
+              <p>
+                I made this project with 3 teammates (Zekai Lv, Victor Liu, and Angela Cui) in my Data
+                Structures
+                class.
+              </p>
+              <h3>Gameplay:</h3>
+              <p><a class="externalLink" href="https://rules.queen-games.com/kingdom-builder_en.pdf">Click
+                  Here to See the
+                  Official Rules from Kingdom Builder</a></p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/YNtNMNwatc0">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h1>Small Apps</h1>
+      <p>These are some of the early apps I have built using Code.org when I started coding as a beginner. The apps
+        below are not all the ones I have created. Some were for school and some were for fun. Recently, I have been
+        learning to build more complex apps using Unity and Swift. More apps may be added once I am completely done with
+        them.</p>
+      <div class="updateWarning">Enable third-party cookie to view them!</div>
+      <div class="project">
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/K2mWoTSUNFqIJGBnDBjmN4teuP-jZmY4a_UwZfF3xeg/embed?nosource"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/L-TidILZA8ug1bF1X4Tx8tVJjsB97kLoqoguVoCsnig/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/sXqkNNY_Ldv68QgDXOgf3ItuFv71fMlHbmX1tyrMhKs/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcAtlF_fQdDJ_4cahf_FKjgk/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/L-TidILZA8ug1bF1X4Tx8l6YDTdQZpqQXMenq5HvS-o/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/1XZTEW5-zt_bM4_WdX-JIBiS0zNeHBXdVwWlkwlZ7kg/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcESLMenkdi01XQ-pDbHp90M/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcJ5BkgJthawwKoCbXCJ7r7Q/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcHGPykd2fkkuVXckMG7CQ0Q/embed"></iframe>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
   <script src="./js/settings.js"></script>
 </body>

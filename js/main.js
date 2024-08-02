@@ -7,6 +7,8 @@ import { UnrealBloomPass } from 'three/examples/jsm/Addons.js';
 import { Water } from 'three/examples/jsm/objects/Water2.js';
 //import {FirstPersonControls} from 'three/examples/jsm/controls/FirstPersonControls.js';
 
+window.scrollTo(0, 0);
+
 const heartURL = new URL('../models/heart.glb', import.meta.url);
 const hippoURL = new URL('../models/hippo_lake.glb', import.meta.url);
 const waterURL = new URL('../images/Water_pattern.png', import.meta.url);
