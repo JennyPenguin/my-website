@@ -484,7 +484,7 @@ function noAction() {}
 function show() {
   document.body.onscroll = noAction;
   prevScroll = window.scrollY;
-  main.classList.add("noScroll");
+  main.classList.add("noView");
   const page = document.getElementById(mapBubbleName[pageChoice]);
   const backB = document.getElementById('backButton');
   page.classList.remove("noView");
@@ -497,7 +497,7 @@ function show() {
 
 function back() {
   document.body.onscroll = moveCamera;
-  main.classList.remove("noScroll");
+  main.classList.remove("noView");
   const page = document.getElementById(mapBubbleName[pageChoice]);
   window.scrollTo(0, prevScroll);
   const backB = document.getElementById('backButton');

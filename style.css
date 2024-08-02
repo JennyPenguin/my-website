@@ -182,7 +182,7 @@ canvas {
 }
 
 .noView {
-  display: none;
+  display: none !important;
 }
 
 .overlay {
