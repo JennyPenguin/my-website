@@ -221,7 +221,17 @@ canvas {
 
 .apps {
   display: inline-block;
-  width: ;
+}
+
+.demo {
+  background-color: rgb(245, 220, 239);
+  padding: 5px 10px;
+  border-radius: 20px;
+  margin: 10px 0px;
+}
+
+.demo h2 {
+  margin: 0;
 }
 
 .showcase h3 {
