@@ -12,7 +12,8 @@
   <div id="vertLine"></div>
   <div id="timeline">
     <div class="activeTime"><button id="introButton" class="dotButton"> </button><span>Intro</span></div>
-    <div><button class="dotButton" id="projectButton"> </button><span>Projects <span class="noView" id="viewBubblesText">(Click on the bubbles for details)</span></span></div>
+    <div><button class="dotButton" id="projectButton"> </button><span>Projects <span class="noView"
+          id="viewBubblesText">(Click on the bubbles for details)</span></span></div>
     <div><button class="dotButton" id="contactButton"> </button><span>Contact</span></div>
   </div>
   <canvas id="bg"></canvas>
@@ -24,13 +25,13 @@
     <div class="full">
       <div class="neon large" id="introScreen">
         <h1 id="name-intro">Hi! I am Jennifer Zhu</h1>
-        <h2>Carnegie Mellon University School of Computer Science student, Currently living in Bay Area</h2>
+        <h2>Carnegie Mellon University School of Computer Science student, Currently living in Silicon Valley.</h2>
         <h2>a.k.a Jenny Hippo</h2>
         <h3>(Scroll to Continue)</h2>
       </div>
     </div>
     <div class="full">
-      <div id="contactScreen" >
+      <div id="contactScreen">
         <h2>Contact Me!</h2>
         <p>Github: <a href="https://github.com/JennyPenguin?tab=repositories">https://github.com/JennyPenguin</a></p>
         <p>LinkedIn: <a href="https://www.linkedin.com/in/jenny-cs/">https://www.linkedin.com/in/jenny-cs/</a></p>
@@ -56,11 +57,14 @@
         <div class="showcase">
           <h3>Original Sketches</h3>
           <div class="carousel">
-            <button class="left">&#60;</button>
+            <button class="left" onclick="nextLeft(this)">&#60;</button>
             <div class="card active">
               <img src="./images/VR Sketch1.jpg" alt="sketch of project 1">
             </div>
-            <button class="right">&#62;</button>
+            <div class="card">
+              <img src="./images/VR Sketch2.jpg" alt="sketch of project 2">
+            </div>
+            <button class="right" onclick="nextRight(this)">&#62;</button>
           </div>
           <h3>Scenes in VR</h3>
           <div class="carousel">
@@ -186,12 +190,80 @@
 
   <div class="overlay noView" id="others">
     <div class="leftOverlay">
-      <h1>Education</h1>
-      <p>I'm proud to be a freshman at Carnegie Mellon University School of Computer Science for the Class of 2028. CMU
-        has always been my dream university. I am looking forward to studying CS and possibly majoring in AI as well. I
-        am also interested in exploring more about Human-Computer Interaction (HCI), Robotics, and Computer Vision at
-        CMU.</p>
-      <div class="updateWarning">More progress on my university projects and classes will be posted here.</div>
+      <h1>Java Projects</h1>
+      <div>
+        <p>
+          I have been learning Java for 2 years. In my Data Structures class in 11th grade, I recreated many board
+          and card games online using Java. Most of my Java games so far were done in collaboration with my
+          friends.
+        </p>
+        <div class="project">
+          <div>
+            <div class="leftColumn">
+              <h2>Kingdom Builder</h2>
+              <h3>Description:</h3>
+              <p>
+                I made this project with 3 teammates (Zekai Lv, Victor Liu, and Angela Cui) in my Data
+                Structures
+                class.
+              </p>
+              <h3>Gameplay</h3>
+              <p><a class="externalLink" href="https://rules.queen-games.com/kingdom-builder_en.pdf">Click
+                  Here to See the
+                  Official Rules from Kingdom Builder</a></p>
+            </div>
+            <div class="demoVideo">
+              <iframe width="630" height="427.5" src="https://www.youtube.com/embed/YNtNMNwatc0">
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+      <hr>
+      <h1>Small Apps</h1>
+      <p>These are some of the early apps I have built using Code.org when I started coding as a beginner. The apps
+        below are not all the ones I have created. Some were for school and some were for fun. Recently, I have been
+        learning to build more complex apps using Unity and Swift. More apps may be added once I am completely done with
+        them.</p>
+        <div class="updateWarning">Enable third-party cookie to view them!</div>
+      <div class="project">
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/K2mWoTSUNFqIJGBnDBjmN4teuP-jZmY4a_UwZfF3xeg/embed?nosource"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/L-TidILZA8ug1bF1X4Tx8tVJjsB97kLoqoguVoCsnig/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/sXqkNNY_Ldv68QgDXOgf3ItuFv71fMlHbmX1tyrMhKs/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcAtlF_fQdDJ_4cahf_FKjgk/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/L-TidILZA8ug1bF1X4Tx8l6YDTdQZpqQXMenq5HvS-o/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/1XZTEW5-zt_bM4_WdX-JIBiS0zNeHBXdVwWlkwlZ7kg/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcESLMenkdi01XQ-pDbHp90M/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcJ5BkgJthawwKoCbXCJ7r7Q/embed"></iframe>
+        </div>
+        <div class="apps">
+          <iframe width="392" height="620" style="border: 0px;"
+            src="https://studio.code.org/projects/applab/ORCMxw7gI1Nq8xyvA7WCcHGPykd2fkkuVXckMG7CQ0Q/embed"></iframe>
+        </div>
+      </div>
     </div>
   </div>
 
